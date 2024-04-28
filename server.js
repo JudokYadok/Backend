@@ -3,6 +3,15 @@ const express = require('express');
 const app = express();
 const port = 60023;
 
+/* 세션 사용 설정 */
+const session = require('express-session');
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'keyboard cat'
+    }))
+
+/* ejs 사용 설정 */
 const ejs = require("ejs");
 app.set("view engine", "ejs")
 // app.set("views", /* ejs 파일 경로 "./views" */)
