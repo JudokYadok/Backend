@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 const port = 60023;
 
+/* 데이터 파싱 */
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+
 /* 세션 사용 설정 */
 const session = require('express-session');
 app.use(session({
