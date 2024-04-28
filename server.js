@@ -1,14 +1,34 @@
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const session = require('express-session');
+const ejs = require("ejs");
 
 const app = express();
 const port = 60023;
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: '주독야독 API',
+            version: '1.0.0',
+            description: '주독야독 API 문서',
+        },
+    },
+    apis: ['./routes/admin/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
+}
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// Swagger UI 설정
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* 데이터 파싱 */
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 /* 세션 사용 설정 */
-const session = require('express-session');
 app.use(session({
     resave: false,
     saveUninitialized: false,
@@ -16,9 +36,8 @@ app.use(session({
     }))
 
 /* ejs 사용 설정 */
-const ejs = require("ejs");
 app.set("view engine", "ejs")
-// app.set("views", /* ejs 파일 경로 "./views" */)
+// app.set("views", /* ejs 파일 경로 ex)"./views" */)
 
 /* 관리자 기능 라우터 */
 // 관리자 메인 화면 로드
@@ -45,4 +64,5 @@ app.use('/admin/feedback', manageFeedbackRouter);
 const server = app.listen(port, () => {
     const { address, port } = server.address();
     console.log(`Server is running on http://${address}:${port}`);
+    console.log(`Swagger --> http://${address}:${port}/api-docs`);
 })
