@@ -8,11 +8,12 @@ const mysql = require('mysql');
 const app = express();
 const port = 60023;
 
+// 테스트용 DB 정보
 const dbConfig = {
     host: 'localhost',
     user:  '',
     password: '',
-    database: '',
+    database: 'TestDB0430',
 }
 
 /* 라우팅 모듈 */
