@@ -61,7 +61,7 @@ router.get("/", (req, res)=>{
         }
 
         res.render('', {    // 페이지명 입력
-            result_req: "",
+            result_req: "지문 관리 페이지 조회 성공",
             text_list: results
         });
     });
@@ -133,7 +133,7 @@ router.get("/:text_id", (req, res)=>{
 
         if(results.length > 0){
             res.render('', {    //
-                result_req: "",
+                result_req: "지문 정보 조회 성공",
                 //지문 목록 추가
                 text_id: results[0].text_id,
                 text_category: results[0].category,
@@ -184,7 +184,7 @@ router.get("/new", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{
         res.render('', {    //페이지명 입력
-            result_req: ""
+            result_req: "지문 추가 페이지 조회 성공"
         });
     } catch(err) {
         res.status(500).json({

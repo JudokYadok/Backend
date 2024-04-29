@@ -61,7 +61,7 @@ router.get("/", (req, res)=>{
         }
 
         res.render('', {    //
-            result_req: "",
+            result_req: "회원 관리 페이지 조회 성공",
             user_list: results
         });
     });
@@ -136,7 +136,7 @@ router.get("/:user_id", (req, res)=>{
 
         if(results.length > 0){
             res.render('', {    //
-                result_req: "",
+                result_req: "회원 정보 조회 성공",
                 // 회원 목록
                 user_id: results[0].user_id,
                 user_email: results[0].email,
