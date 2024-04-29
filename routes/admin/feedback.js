@@ -48,7 +48,6 @@ const conn = require('../db');
  *                     description: "오류 메시지"
  */
 router.get("", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const query = 'SELECT user_id, name FROM user';
     conn.query(query, (err, results) => {
         if (err) {
@@ -59,7 +58,7 @@ router.get("", (req, res)=>{
             return;
         }
 
-        res.render('', {    //
+        res.status(200).render('', {    //
             result_req: "피드백 관리 페이지 조회 성공",
             user_list: results
         });
@@ -112,7 +111,6 @@ router.get("", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.get("/:user_id", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const user_id = req.params.user_id;
     const query = 'SELECT feedback_id, contents FROM feedback WHERE user_id = ?';
 
@@ -125,7 +123,7 @@ router.get("/:user_id", (req, res)=>{
             return;
         }
 
-        res.render('', {    //
+        res.status(200).render('', {    //
             result_req: "피드백 목록 조회 성공",
             feedback_list: results
         });

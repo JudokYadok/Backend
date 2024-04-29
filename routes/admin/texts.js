@@ -48,7 +48,6 @@ const conn = require('../db');
  *                     description: "오류 메시지"
  */
 router.get("", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const query = 'SELECT text_id, title FROM text';
 
     conn.query(query, (err, results) => {
@@ -60,7 +59,7 @@ router.get("", (req, res)=>{
             return;
         }
 
-        res.render('', {    // 페이지명 입력
+        res.status(200).render('', {    // 페이지명 입력
             result_req: "지문 관리 페이지 조회 성공",
             text_list: results
         });
@@ -118,7 +117,6 @@ router.get("", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.get("/:text_id", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
 
@@ -132,7 +130,7 @@ router.get("/:text_id", (req, res)=>{
         }
 
         if(results.length > 0){
-            res.render('', {    //
+            res.status(200).render('', {    //
                 result_req: "지문 정보 조회 성공",
                 //지문 목록 추가
                 text_id: results[0].text_id,
@@ -181,9 +179,8 @@ router.get("/:text_id", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.get("/new", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     try{
-        res.render('', {    //페이지명 입력
+        res.status(200).render('', {    //페이지명 입력
             result_req: "지문 추가 페이지 조회 성공"
         });
     } catch(err) {
@@ -233,7 +230,6 @@ router.get("/new", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.post("/new", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     // 유효성 검사
     const category = req.body.text_category;
     const title = req.body.text_title;
@@ -252,7 +248,7 @@ router.post("/new", (req, res)=>{
         }
         
         //redirect로 변경
-        res.render('', {    // 페이지명 입력
+        res.status(200).render('', {    // 페이지명 입력
             result_req: "",
         });
     });
@@ -307,7 +303,6 @@ router.post("/new", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.put("/:text_id", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     // 유효성 검사
     const text_id = req.params.text_id;
     const category = req.body.text_category;
@@ -326,7 +321,7 @@ router.put("/:text_id", (req, res)=>{
         }
 
         //redirect로 변경
-        res.render('', {    // 페이지명 입력
+        res.status(200).render('', {    // 페이지명 입력
             result_req: "",
         });
     });
@@ -363,7 +358,6 @@ router.put("/:text_id", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.delete("/:text_id", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const text_id = req.params.text_id;
     const query = 'DELETE FROM text WHERE text_id = ?';
     
@@ -377,7 +371,7 @@ router.delete("/:text_id", (req, res)=>{
         }
 
         //redirect로 변경
-        res.render('', {    // 페이지명 입력
+        res.status(200).render('', {    // 페이지명 입력
             result_req: "",
         });
     });

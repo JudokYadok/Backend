@@ -42,9 +42,8 @@ const conn = require('../db');
  *                     description: "오류 메시지"
  */
 router.get("/login", (req, res, next)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     try{
-        res.render('', {    // 페이지명 입력
+        res.status(200).render('', {    // 페이지명 입력
             result_req: "로그인 페이지 조회 성공"
         });
     } catch(err) {
@@ -100,7 +99,6 @@ router.get("/login", (req, res, next)=>{
  */
 // 암호화 추가 필요
 router.post("/login", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     const admin_id = req.body.admin_id;
     const admin_pw = req.body.admin_pw;
     // admin table 따로 만들지 결정 후에 query문 수정
@@ -155,7 +153,6 @@ router.post("/login", (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.get("/logout", (req, res)=>{
-    res.writeHead(200, {'Content-Type': 'application/json'});
     try{
         req.session.destroy();
         res.redirect('/admin/');
