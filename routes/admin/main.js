@@ -47,7 +47,7 @@ router.get("/", (req, res)=>{
             result_req: ""
         });
     } catch(err) {
-        res.status(500).render('', {    //페이지명 입력
+        res.status(500).json({
             result_req: err.message
         })
     }

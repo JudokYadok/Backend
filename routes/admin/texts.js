@@ -54,7 +54,7 @@ router.get("/", (req, res)=>{
     conn.query(query, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    // 페이지명 입력
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -125,7 +125,7 @@ router.get("/:text_id", (req, res)=>{
     conn.query(query, text_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -141,7 +141,7 @@ router.get("/:text_id", (req, res)=>{
                 text_contents: results[0].contents,
             });
         } else {
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: "지문이 존재하지 않습니다."
             });
         }
@@ -187,7 +187,7 @@ router.get("/new", (req, res)=>{
             result_req: ""
         });
     } catch(err) {
-        res.status(500).render('', {    //페이지명 입력
+        res.status(500).json({
             result_req: err.message
         });
     }
@@ -245,7 +245,7 @@ router.post("/new", (req, res)=>{
     conn.query(query, values, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    // 페이지명 입력
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -319,7 +319,7 @@ router.put("/:text_id", (req, res)=>{
     conn.query(query, values, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    // 페이지명 입력
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -370,7 +370,7 @@ router.delete("/:text_id", (req, res)=>{
     conn.query(query, text_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    // 페이지명 입력
+            res.status(500).json({
                 result_req: err.message
             });
             return;

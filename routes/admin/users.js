@@ -54,7 +54,7 @@ router.get("/", (req, res)=>{
     conn.query(query, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -128,7 +128,7 @@ router.get("/:user_id", (req, res)=>{
     conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -145,7 +145,7 @@ router.get("/:user_id", (req, res)=>{
                 user_d_day: results[0].d_day    // DB 설계 변경 후 재수정
             });
         } else {
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: "회원 정보가 존재하지 않습니다."
             });
         }
@@ -191,7 +191,7 @@ router.delete("/:user_id", (req, res)=>{
     conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;

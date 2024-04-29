@@ -44,11 +44,11 @@ const conn = require('../db');
 router.get("/login", (req, res, next)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{
-        res.render('', {    //
+        res.render('', {    // 페이지명 입력
             result_req: ""
         });
     } catch(err) {
-        res.status(500).render('', {    //
+        res.status(500).json({
             result_req: err.message
         })
     }
@@ -109,18 +109,18 @@ router.post("/login", (req, res)=>{
     conn.query(query, admin_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
         }
 
         if(results.length === 0){
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: '존재하지 않는 아이디입니다.'
             });
         } else if (results[0].pw !== admin_pw) {
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: '비밀번호가 일치하지 않습니다.'
             });
         } else {
@@ -160,7 +160,7 @@ router.get("/logout", (req, res)=>{
         req.session.destroy();
         res.redirect('/admin/');
     } catch(err) {
-        res.status(500).render('', {    //
+        res.status(500).json({
             result_req: err.message
         })
     }

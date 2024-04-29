@@ -53,7 +53,7 @@ router.get("/", (req, res)=>{
     conn.query(query, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
@@ -119,7 +119,7 @@ router.get("/:user_id", (req, res)=>{
     conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).render('', {    //
+            res.status(500).json({
                 result_req: err.message
             });
             return;
