@@ -5,6 +5,18 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const app = express();
 const port = 60023;
 
+// MySQL 연결 생성
+const connection = mysql.createConnection(dbConfig);
+
+// 연결 테스트
+connection.connect((err) => {
+  if (err) {
+    console.error("Error connecting to MySQL:", err);
+  } else {
+    console.log("Connected to MySQL");
+  }
+});
+
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -21,6 +33,12 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Swagger UI 설정
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 서버 종료 시 MySQL 연결 종료
+process.on("SIGINT", () => {
+    connection.end();
+    process.exit();
+  });
 
 const server = app.listen(port, () => {
     const { address, port } = server.address();
