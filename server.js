@@ -5,6 +5,9 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const app = express();
 const port = 60023;
 
+// 라우팅 모듈
+const kakaoAuth = require('./routes/auth');
+
 // MySQL 연결 생성
 const connection = mysql.createConnection(dbConfig);
 
@@ -33,6 +36,9 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Swagger UI 설정
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 라우팅
+app.use('/user/login', kakaoAuth);
 
 // 서버 종료 시 MySQL 연결 종료
 process.on("SIGINT", () => {
