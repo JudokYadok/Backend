@@ -248,9 +248,7 @@ router.post("/new", (req, res)=>{
         }
         
         //redirect로 변경
-        res.status(200).render('', {    // 페이지명 입력
-            result_req: "",
-        });
+        res.redirect('/admin/text')
     });
 });
 
@@ -321,9 +319,7 @@ router.put("/:text_id", (req, res)=>{
         }
 
         //redirect로 변경
-        res.status(200).render('', {    // 페이지명 입력
-            result_req: "",
-        });
+        res.redirect('/admin/text/' + text_id);
     });
 })
 
@@ -371,9 +367,7 @@ router.delete("/:text_id", (req, res)=>{
         }
 
         //redirect로 변경
-        res.status(200).render('', {    // 페이지명 입력
-            result_req: "",
-        });
+        res.redirect('/admin/text');
     });
 })
 

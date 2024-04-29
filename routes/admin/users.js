@@ -193,10 +193,7 @@ router.delete("/:user_id", (req, res)=>{
             });
             return;
         }
-        // redirect로 변경
-        res.status(200).render('', {    //
-            result_req: "",
-        });
+        res.redirect('/admin/users');
     });
 })
 
