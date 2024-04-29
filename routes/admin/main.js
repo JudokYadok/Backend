@@ -1,8 +1,45 @@
 const express = require('express');
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Admin-main
+ *   description: 관리자 메인 화면 조회
+ */
 
 /* 관리자 메인 화면 조회 */
+/**
+ * @swagger
+ * paths:
+ *   /admin/:
+ *     get:
+ *       summary: "관리자 메인 화면 조회"
+ *       description: "관리자 메인 화면 조회 요청으로 메인 페이지를 렌더링"
+ *       tags: [Admin-main]
+ *       responses:
+ *         "200":
+ *           description: "관리자 메인 화면 조회 성공"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "결과 메시지"
+ *         "500":
+ *           description: "오류 발생"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "오류 메시지"
+ */
+
 router.get("/", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{

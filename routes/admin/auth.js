@@ -3,7 +3,44 @@ const router = express.Router();
 const conn = require('../db');
 // const crypto = require('crypto');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Admin-auth
+ *   description: 관리자 인증
+ */
+
 /* 로그인 페이지 조회 */
+/**
+ * @swagger
+ * paths:
+ *   /admin/login:
+ *     get:
+ *       summary: "관리자 로그인 페이지 조회"
+ *       description: "관리자 로그인 화면 조회 요청으로 로그인 페이지를 렌더링"
+ *       tags: [Admin-auth]
+ *       responses:
+ *         "200":
+ *           description: "관리자 로그인 페이지 조회 성공"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "결과 메시지"
+ *         "500":
+ *           description: "오류 발생"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "오류 메시지"
+ */
 router.get("/login", (req, res, next)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{
@@ -18,6 +55,49 @@ router.get("/login", (req, res, next)=>{
 });
 
 /* 로그인 */
+/**
+ * @swagger
+ * paths:
+ *   /admin/login:
+ *     post:
+ *       summary: "관리자 로그인"
+ *       description: "관리자 로그인 처리"
+ *       tags: [Admin-auth]
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 admin_id:
+ *                   type: string
+ *                   description: "관리자 아이디"
+ *                 admin_pw:
+ *                   type: string
+ *                   description: "관리자 비밀번호"
+ *       responses:
+ *         "200":
+ *           description: "관리자 로그인 성공"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "결과 메시지"
+ *         "500":
+ *           description: "서버 오류 발생 또는 아이디/비밀번호 오류"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "오류 메시지"
+ */
 // 암호화 추가 필요
 router.post("/login", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
@@ -52,6 +132,28 @@ router.post("/login", (req, res)=>{
 });
 
 /* 로그아웃 */
+/**
+ * @swagger
+ * paths:
+ *   /admin/logout:
+ *     get:
+ *       summary: "관리자 로그아웃"
+ *       description: "관리자 로그아웃 처리"
+ *       tags: [Admin-auth]
+ *       responses:
+ *         "200":
+ *           description: "로그아웃 성공"
+ *         "500":
+ *           description: "오류 발생"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "오류 메시지"
+ */
 router.get("/logout", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{
