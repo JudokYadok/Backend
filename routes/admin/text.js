@@ -93,6 +93,13 @@ router.get("", (req, res)=>{
  *                   result_req:
  *                     type: string
  *                     description: "결과 메시지"
+ *                   text_list:
+ *                     type: object
+ *                     description: "지문 목록"
+ *                     example:
+ *                       [
+ *                         { "text_id": 1000, "title": "지문1"}
+ *                       ]
  *                   text_id:
  *                     type: number
  *                     description: "지문 번호"
@@ -119,8 +126,9 @@ router.get("", (req, res)=>{
 router.get("/:text_id", (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
+    const query2 = 'SELECT text_id, title FROM text';
 
-    conn.query(query, text_id, (err, results) => {
+    conn.query(query, text_id, (err, results1) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -130,14 +138,25 @@ router.get("/:text_id", (req, res)=>{
         }
 
         if(results.length > 0){
-            res.status(200).render('', {    //
-                result_req: "지문 정보 조회 성공",
-                //지문 목록 추가
-                text_id: results[0].text_id,
-                text_category: results[0].category,
-                text_title: results[0].title,
-                text_contents: results[0].contents,
-            });
+            const text_data = results1[0];
+            conn.query(query2, (err, results2) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({
+                        result_req: err.message
+                    });
+                    return;
+                }
+
+                res.status(200).render('', {    // 페이지명 입력
+                    result_req: "지문 정보 조회 성공",
+                    text_list: results2,
+                    text_id: text_data.text_id,
+                    text_category: text_data.category,
+                    text_title: text_data.title,
+                    text_contents: text_data.contents
+                });
+            })
         } else {
             res.status(500).json({
                 result_req: "지문이 존재하지 않습니다."
@@ -253,12 +272,92 @@ router.post("/new", (req, res)=>{
 });
 
 /* 지문 수정 페이지 */
+/**
+ * @swagger
+ * paths:
+ *   /admin/text/new/{text_id}:
+ *     get:
+ *       summary: "지문 수정 페이지 조회"
+ *       description: "지문 수정 페이지 렌더링"
+ *       tags: [Admin-text]
+ *       parameters:
+ *         - in: path
+ *           name: text_id
+ *           required: true
+ *           description: "수정할 지문 번호"
+ *           schema:
+ *             type: number
+ *       responses:
+ *         "200":
+ *           description: "지문 수정 페이지 조회 성공"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "결과 메시지"
+ *                   text_id:
+ *                     type: number
+ *                     description: "지문 번호"
+ *                   text_category:
+ *                     type: string
+ *                     description: "지문 유형"
+ *                   text_title:
+ *                     type: string
+ *                     description: "지문 제목"
+ *                   text_contents:
+ *                     type: string
+ *                     description: "지문 내용"
+ *         "500":
+ *           description: "오류 발생"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   result_req:
+ *                     type: string
+ *                     description: "오류 메시지"
+ */
+router.get("/new/:text_id", (req, res)=>{
+    const text_id = req.params.text_id;
+    const query = 'SELECT * FROM text WHERE text_id = ?';
+
+    conn.query(query, text_id, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({
+                result_req: err.message
+            });
+            return;
+        }
+
+        if(results.length > 0){
+            const text_data = results[0];
+            res.status(200).render('', {    // 페이지명 입력
+                result_req: "지문 수정 페이지 조회 성공",
+                text_list: results2,
+                text_id: text_data.text_id,
+                text_category: text_data.category,
+                text_title: text_data.title,
+                text_contents: text_data.contents
+            });
+        } else {
+            res.status(500).json({
+                result_req: "지문이 존재하지 않습니다."
+            });
+        }
+
+    });
+});
 
 /* 지문 수정 요청*/
 /**
  * @swagger
  * paths:
- *   /admin/text/{text_id}:
+ *   /admin/text/new/{text_id}:
  *     put:
  *       summary: "지문 수정"
  *       description: "지문 수정 처리"
@@ -300,7 +399,7 @@ router.post("/new", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.put("/:text_id", (req, res)=>{
+router.put("/new/:text_id", (req, res)=>{
     // 유효성 검사
     const text_id = req.params.text_id;
     const category = req.body.text_category;
