@@ -47,7 +47,7 @@ const conn = require('../db');
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/", (req, res)=>{
+router.get("", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     const query = 'SELECT user_id, name FROM user';
     conn.query(query, (err, results) => {
