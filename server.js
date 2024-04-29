@@ -47,7 +47,7 @@ const adminAuthRouter = require('./routes/admin/auth');
 // 회원 관리
 const manageUserRouter = require('./routes/admin/users');
 // 지문 관리
-const manageTextRouter = require('./routes/admin/texts');
+const manageTextRouter = require('./routes/admin/text');
 // 피드백 관리
 const manageFeedbackRouter = require('./routes/admin/feedback');
 // AI 관리
