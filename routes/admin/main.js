@@ -44,7 +44,7 @@ router.get("/", (req, res)=>{
     res.writeHead(200, {'Content-Type': 'application/json'});
     try{
         res.render('', {    //페이지명 입력
-            result_req: ""
+            result_req: "관리자 메인 페이지 조회 성공"
         });
     } catch(err) {
         res.status(500).json({
