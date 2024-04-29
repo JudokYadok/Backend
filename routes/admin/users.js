@@ -44,8 +44,6 @@ router.get("/:user_id", (req, res)=>{
                 user_id: results[0].user_id,
                 user_email: results[0].email,
                 user_name: results[0].name,
-                user_birth: results[0].birthdate,
-                user_phone: results[0].phone
             });
         } else {
             res.status(500).render('', {    //
