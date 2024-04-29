@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const conn = require('../db');
 
 /**
  * @swagger
@@ -50,7 +49,7 @@ const conn = require('../db');
 router.get("", (req, res)=>{
     const query = 'SELECT text_id, title FROM text';
 
-    conn.query(query, (err, results) => {
+    req.conn.query(query, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -128,7 +127,7 @@ router.get("/:text_id", (req, res)=>{
     const query = 'SELECT * FROM text WHERE text_id = ?';
     const query2 = 'SELECT text_id, title FROM text';
 
-    conn.query(query, text_id, (err, results1) => {
+    req.conn.query(query, text_id, (err, results1) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -139,7 +138,7 @@ router.get("/:text_id", (req, res)=>{
 
         if(results.length > 0){
             const text_data = results1[0];
-            conn.query(query2, (err, results2) => {
+            req.conn.query(query2, (err, results2) => {
                 if (err) {
                     console.error(err);
                     res.status(500).json({
@@ -257,7 +256,7 @@ router.post("/new", (req, res)=>{
     const query = "INSERT INTO text (user_id, category, title, contents) VALUES (?, ?, ?, ?)";
     const values = [user_id, category, title, contents];
 
-    conn.query(query, values, (err, results) => {
+    req.conn.query(query, values, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -325,7 +324,7 @@ router.get("/new/:text_id", (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
 
-    conn.query(query, text_id, (err, results) => {
+    req.conn.query(query, text_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -408,7 +407,7 @@ router.put("/new/:text_id", (req, res)=>{
     const query = "UPDATE text SET category = ?, title = ?, contents = ? WHERE text_id = ?";
     const values = [category, title, contents, text_id];
 
-    conn.query(query, values, (err, results) => {
+    req.conn.query(query, values, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -456,7 +455,7 @@ router.delete("/:text_id", (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'DELETE FROM text WHERE text_id = ?';
     
-    conn.query(query, text_id, (err, results) => {
+    req.conn.query(query, text_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({

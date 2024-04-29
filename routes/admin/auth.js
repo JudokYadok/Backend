@@ -104,7 +104,7 @@ router.post("/login", (req, res)=>{
     // admin table 따로 만들지 결정 후에 query문 수정
     const query = "SELECT id, pw FROM admin where id = ?";
 
-    conn.query(query, admin_id, (err, results) => {
+    req.conn.query(query, admin_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({

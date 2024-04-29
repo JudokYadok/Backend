@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const conn = require('../db');
 
 /**
  * @swagger
@@ -49,7 +48,7 @@ const conn = require('../db');
  */
 router.get("", (req, res)=>{
     const query = 'SELECT user_id, name FROM user';
-    conn.query(query, (err, results) => {
+    req.conn.query(query, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -114,7 +113,7 @@ router.get("/:user_id", (req, res)=>{
     const user_id = req.params.user_id;
     const query = 'SELECT feedback_id, contents FROM feedback WHERE user_id = ?';
 
-    conn.query(query, user_id, (err, results) => {
+    req.conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({

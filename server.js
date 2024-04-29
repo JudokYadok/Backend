@@ -2,10 +2,43 @@ const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const session = require('express-session');
-const ejs = require("ejs");
+const ejs = require('ejs');
+const mysql = require('mysql');
 
 const app = express();
 const port = 60023;
+
+const dbConfig = {
+    host: 'localhost',
+    user:  '',
+    password: '',
+    database: '',
+}
+
+/* 라우팅 모듈 */
+const adminMainRouter = require('./routes/admin/main');
+const adminAuthRouter = require('./routes/admin/auth');
+const manageUserRouter = require('./routes/admin/users');
+const manageTextRouter = require('./routes/admin/text');
+const manageFeedbackRouter = require('./routes/admin/feedback');
+// const manageAiRouter = require('./routes/admin/ai');
+
+// MySQL 연결 생성
+const connection = mysql.createConnection(dbConfig);
+
+// 연결 테스트
+connection.connect((err) => {
+    if (err) {
+        console.error("Error connecting to MySQL:", err);
+    } else {
+        console.log("Connected to MySQL");
+    }
+});
+
+app.use((req, res, next) => {
+    req.conn = connection;
+    next();
+});
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -39,20 +72,6 @@ app.use(session({
 app.set("view engine", "ejs")
 // app.set("views", /* ejs 파일 경로 ex)"./views" */)
 
-/* 관리자 기능 라우터 */
-// 관리자 메인 화면 로드
-const adminMainRouter = require('./routes/admin/main');
-// 관리자 인증
-const adminAuthRouter = require('./routes/admin/auth');
-// 회원 관리
-const manageUserRouter = require('./routes/admin/users');
-// 지문 관리
-const manageTextRouter = require('./routes/admin/text');
-// 피드백 관리
-const manageFeedbackRouter = require('./routes/admin/feedback');
-// AI 관리
-// const manageAiRouter = require('./routes/admin/ai');
-
 // 관리자 기능 router 활성화
 app.use('/admin', adminMainRouter);
 app.use('/admin', adminAuthRouter);
@@ -60,6 +79,12 @@ app.use('/admin/users', manageUserRouter);
 app.use('/admin/text', manageTextRouter);
 app.use('/admin/feedback', manageFeedbackRouter);
 // app.use('/admin/ai', manageAiRouter);
+
+// 서버 종료 시 MySQL 연결 종료
+process.on("SIGINT", () => {
+    connection.end();
+    process.exit();
+});
 
 const server = app.listen(port, () => {
     const { address, port } = server.address();
