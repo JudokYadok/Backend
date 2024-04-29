@@ -93,6 +93,13 @@ router.get("", (req, res)=>{
  *                   result_req:
  *                     type: string
  *                     description: "결과 메시지"
+ *                   user_list:
+ *                     type: object
+ *                     description: "유저 목록"
+ *                     example:
+ *                       [
+ *                         { "user_id": 1000, "name": "회원1"}
+ *                       ]
  *                   user_id:
  *                     type: number
  *                     description: 회원 번호
@@ -122,6 +129,7 @@ router.get("", (req, res)=>{
 router.get("/:user_id", (req, res)=>{
     const user_id = req.params.user_id;
     const query = 'SELECT * FROM user WHERE user_id = ?';
+    const query2 = 'SELECT user_id, name FROM user';
 
     conn.query(query, user_id, (err, results) => {
         if (err) {
@@ -133,15 +141,27 @@ router.get("/:user_id", (req, res)=>{
         }
 
         if(results.length > 0){
-            res.status(200).render('', {    //
-                result_req: "회원 정보 조회 성공",
-                // 회원 목록
-                user_id: results[0].user_id,
-                user_email: results[0].email,
-                user_name: results[0].name,
-                user_phone: results[0].phone,
-                user_d_day: results[0].d_day    // DB 설계 변경 후 재수정
-            });
+            const user_data = results[0];
+
+            conn.query(query2, (err, results2) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({
+                        result_req: err.message
+                    });
+                    return;
+                }
+
+                res.status(200).render('', {    //페이지명 입력
+                    result_req: "회원 정보 조회 성공",
+                    user_list: results2,
+                    user_id: user_data.user_id,
+                    user_email: user_data.email,
+                    user_name: user_data.name,
+                    user_phone: user_data.phone,
+                    user_d_day: user_data.d_day    // DB 설계 변경 후 재수정
+                });
+            })
         } else {
             res.status(500).json({
                 result_req: "회원 정보가 존재하지 않습니다."
