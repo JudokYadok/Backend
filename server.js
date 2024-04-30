@@ -59,19 +59,20 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* 데이터 파싱 */
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 /* 세션 사용 설정 */
 app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: 'keyboard cat'
-    }))
+    }));
 
 /* ejs 사용 설정 */
-app.set("view engine", "ejs")
-// app.set("views", /* ejs 파일 경로 ex)"./views" */)
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
 
 // 관리자 기능 router 활성화
 app.use('/admin', adminMainRouter);
@@ -91,4 +92,4 @@ const server = app.listen(port, () => {
     const { address, port } = server.address();
     console.log(`Server is running on http://${address}:${port}`);
     console.log(`Swagger --> http://${address}:${port}/api-docs`);
-})
+});
