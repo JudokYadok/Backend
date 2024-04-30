@@ -58,7 +58,7 @@ router.get("", (req, res)=>{
             return;
         }
 
-        res.status(200).render('', {    // 페이지명 입력
+        res.status(200).render('contents_list', {    // 페이지명 입력
             result_req: "지문 관리 페이지 조회 성공",
             text_list: results
         });
@@ -147,7 +147,7 @@ router.get("/:text_id", (req, res)=>{
                     return;
                 }
 
-                res.status(200).render('', {    // 페이지명 입력
+                res.status(200).render('contents', {    // 페이지명 입력
                     result_req: "지문 정보 조회 성공",
                     text_list: results2,
                     text_id: text_data.text_id,
@@ -198,7 +198,7 @@ router.get("/:text_id", (req, res)=>{
  */
 router.get("/new", (req, res)=>{
     try{
-        res.status(200).render('', {    //페이지명 입력
+        res.status(200).render('contents_new', {    //페이지명 입력
             result_req: "지문 추가 페이지 조회 성공"
         });
     } catch(err) {
@@ -335,7 +335,7 @@ router.get("/new/:text_id", (req, res)=>{
 
         if(results.length > 0){
             const text_data = results[0];
-            res.status(200).render('', {    // 페이지명 입력
+            res.status(200).render('contents_update', {    // 페이지명 입력
                 result_req: "지문 수정 페이지 조회 성공",
                 text_list: results2,
                 text_id: text_data.text_id,

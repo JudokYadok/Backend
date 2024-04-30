@@ -43,7 +43,7 @@ const conn = require('../db');
  */
 router.get("/login", (req, res, next)=>{
     try{
-        res.status(200).render('', {    // 페이지명 입력
+        res.status(200).render('login', {
             result_req: "로그인 페이지 조회 성공"
         });
     } catch(err) {

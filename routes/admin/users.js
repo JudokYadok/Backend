@@ -58,7 +58,7 @@ router.get("", (req, res)=>{
             return;
         }
 
-        res.status(200).render('', {    //
+        res.status(200).render('user_list', {    //
             result_req: "회원 관리 페이지 조회 성공",
             user_list: results
         });
@@ -151,7 +151,7 @@ router.get("/:user_id", (req, res)=>{
                     return;
                 }
 
-                res.status(200).render('', {    //페이지명 입력
+                res.status(200).render('user', {
                     result_req: "회원 정보 조회 성공",
                     user_list: results2,
                     user_id: user_data.user_id,

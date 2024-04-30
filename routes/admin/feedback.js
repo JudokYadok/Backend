@@ -57,7 +57,7 @@ router.get("", (req, res)=>{
             return;
         }
 
-        res.status(200).render('', {    //
+        res.status(200).render('feedback_list', {    //
             result_req: "피드백 관리 페이지 조회 성공",
             user_list: results
         });
@@ -122,7 +122,7 @@ router.get("/:user_id", (req, res)=>{
             return;
         }
 
-        res.status(200).render('', {    //
+        res.status(200).render('feedback', {    //
             result_req: "피드백 목록 조회 성공",
             feedback_list: results
         });
