@@ -98,8 +98,8 @@ router.get("/login", (req, res, next)=>{
  */
 // 암호화 추가 필요
 router.post("/login", (req, res)=>{
-    const admin_id = req.body.admin_id;
-    const admin_pw = req.body.admin_pw;
+    const admin_id = req.body.username;
+    const admin_pw = req.body.password;
     // admin table 따로 만들지 결정 후에 query문 수정
     const query = "SELECT id, pw FROM admin where id = ?";
 
@@ -121,7 +121,7 @@ router.post("/login", (req, res)=>{
                 result_req: '비밀번호가 일치하지 않습니다.'
             });
         } else {
-            req.session.admin_id = admin_id;
+            req.session.user_id = admin_id;
             res.redirect('/admin/');
         }
         

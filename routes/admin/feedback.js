@@ -91,6 +91,13 @@ router.get("", (req, res)=>{
  *                   result_req:
  *                     type: string
  *                     description: "결과 메시지"
+ *                   user_list:
+ *                     type: object
+ *                     description: "유저 목록"
+ *                     example:
+ *                       [
+ *                         { "user_id": 1000, "name": "회원1"}
+ *                       ]
  *                   feedback_list:
  *                     type: object
  *                     description: "피드백 목록"
@@ -112,6 +119,7 @@ router.get("", (req, res)=>{
 router.get("/:user_id", (req, res)=>{
     const user_id = req.params.user_id;
     const query = 'SELECT feedback_id, contents FROM feedback WHERE user_id = ?';
+    const query2 = 'SELECT user_id, name FROM user';
 
     req.conn.query(query, user_id, (err, results) => {
         if (err) {
@@ -121,10 +129,20 @@ router.get("/:user_id", (req, res)=>{
             });
             return;
         }
+        req.conn.query(query2, (err, results2) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({
+                    result_req: err.message
+                });
+                return;
+            }
 
-        res.status(200).render('feedback', {    //
-            result_req: "피드백 목록 조회 성공",
-            feedback_list: results
+            res.status(200).render('feedback', {    //
+                result_req: "피드백 목록 조회 성공",
+                user_list: results2,
+                feedback_list: results
+            });
         });
     });
 });

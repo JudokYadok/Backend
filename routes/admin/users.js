@@ -158,7 +158,7 @@ router.get("/:user_id", (req, res)=>{
                     user_email: user_data.email,
                     user_name: user_data.name,
                     user_phone: user_data.phone,
-                    user_d_day: user_data.d_day    // DB 설계 변경 후 재수정
+                    user_d_day: user_data.d_day.getFullYear() + '-' + user_data.d_day.getMonth() + '-' + user_data.d_day.getDate()   // DB 설계 변경 후 재수정
                 });
             })
         } else {
@@ -212,7 +212,10 @@ router.delete("/:user_id", (req, res)=>{
             });
             return;
         }
-        res.redirect('/admin/users');
+        
+        res.status(200).json({
+            result_req: '회원 삭제 성공'
+        });
     });
 })
 
