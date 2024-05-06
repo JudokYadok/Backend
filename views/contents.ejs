@@ -138,12 +138,12 @@
     </div>
 
     <div id="btn">
-        <button type="submit" onclick="window.location.href = 'confirmUpdate(<%= text_id %>)';"
+        <button type="submit" onclick="confirmUpdate('<%= text_id %>');"
             style="min-width: 300px; height: 40px; font-weight: bold; border-style: solid; border-radius: 30px; border-color: #FDBBBB; border-width: 3px; background-color: rgba(253, 187, 187, 0.4); font-size: 20px; color: black; margin-right: 10px;"
             onmouseover="this.style.backgroundColor='white'; this.style.color='#FDBBBB';"
             onmouseout="this.style.backgroundColor='rgba(253, 187, 187, 0.4)'; this.style.color='black';">수정</button>
 
-        <button type="submit" onclick="window.location.href = 'confirmDelete(<%= text_id %>)';"
+        <button type="submit" onclick="confirmDelete('<%= text_id %>');"
             style="min-width: 300px; height: 40px; font-weight: bold; border-style: solid; border-radius: 30px; border-color: #FDBBBB; border-width: 3px; background-color: rgba(253, 187, 187, 0.4); font-size: 20px; color: black; margin-left: 10px;"
             onmouseover="this.style.backgroundColor='white'; this.style.color='#FDBBBB';"
             onmouseout="this.style.backgroundColor='rgba(253, 187, 187, 0.4)'; this.style.color='black';">삭제</button>
@@ -157,7 +157,7 @@
         var confirmation = confirm("내용이 수정됩니다. 계속 진행하시겠습니까?");
 
         if (confirmation) {
-            location.href = '/admin/text/' + text_id;
+            window.location.href = '/admin/text/new/' + text_id;
         }
     }
 
@@ -165,7 +165,20 @@
         var confirmation = confirm("정말로 삭제하시겠습니까?");
 
         if (confirmation) {
-            location.href = '/admin/text' + text_id;
+            fetch('/admin/text/' + text_id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                console.log(response.ok)
+                if (response.ok) {
+                    window.location.href = '/admin/text';
+                } else {
+                    console.error('삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
         }
     }
 </script>
