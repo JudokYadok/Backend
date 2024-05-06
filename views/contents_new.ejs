@@ -167,38 +167,38 @@
         </ul>
     </div>
 
-    <input type="name" id="name" name="name" placeholder="지문 이름"
-        style="width: 300px; height: 30px; font-size: 20px; border-radius: 10px;" value="<%= text_title %>" required>
+    <form action="/admin/text/new" method="POST">
+    <input type="name" id="name" name="text_title" placeholder="지문 이름"
+        style="width: 300px; height: 30px; font-size: 20px; border-radius: 10px;" value="" required>
 
-    <select name="type" id="type" required>
+    <select name="text_category" id="type" required>
         <option value="경제">경제</option>
         <option value="예술">예술</option>
         <option value="과학">과학</option>
         <option value="기술">기술</option>
     </select>
 
-    getValue() = <%= text_category %>
 
         <div id="section">
 
             <div style="display: flex; align-items: start; justify-content: start;">
-                <textarea
+                <textarea id="text_contents" name="text_contents"
                     style="border: none; border-radius: 10px; background-color: rgba(250, 240, 240, 1); margin-left: 20px; width: 100%; height: 450px; font-size: 20px; line-height: 1.5; padding: 7px;"
                     onmouseover="this.style.border='3px solid #FDBBBB';"
                     onmouseout="this.style.backgroundColor='rgba(250, 240, 240, 1)'; this.style.border='none';"
-                    onfocus="this.style.border='3px solid #FDBBBB'; this.style.outline='none';"><%= text_contents %></textarea>
+                    onfocus="this.style.border='3px solid #FDBBBB'; this.style.outline='none';"></textarea>
             </div>
         </div>
         </div>
 
         <div id="btn">
-            <button type="submit" onclick="window.location.href = '/admin/text/new';"
+            <button type="submit"
                 style="min-width: 350px; height: 40px; font-weight: bold; border-style: solid; border-radius: 30px; border-color: #FDBBBB; border-width: 3px; background-color: rgba(253, 187, 187, 0.4); font-size: 20px; color: black; margin-right: 10px;"
                 onmouseover="this.style.backgroundColor='white'; this.style.color='#FDBBBB';"
                 onmouseout="this.style.backgroundColor='rgba(253, 187, 187, 0.4)'; this.style.color='black';">추가</button>
         </div>
 
-        </span>
+    </form>
 
         <script>
             function getValue() {
