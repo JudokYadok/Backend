@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { adminRequire } = require('./middleware');
 
 /**
  * @swagger
@@ -103,7 +104,7 @@ router.get("", adminRequire, (req, res)=>{
  *                         { "text_id": 1000, "title": "지문1"}
  *                       ]
  */
-router.get("/new", (req, res)=>{
+router.get("/new", adminRequire, (req, res)=>{
     const query = 'SELECT text_id, title FROM text';
 
     req.conn.query(query, (err, results) => {
@@ -161,7 +162,7 @@ router.get("/new", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.post("/new", (req, res)=>{
+router.post("/new", adminRequire, (req, res)=>{
     // 유효성 검사
     const category = req.body.text_category;
     const title = req.body.text_title;
@@ -241,7 +242,7 @@ router.post("/new", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/new/:text_id", (req, res)=>{
+router.get("/new/:text_id", adminRequire, (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
     const query2 = 'SELECT text_id, title FROM text';
@@ -330,7 +331,7 @@ router.get("/new/:text_id", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.post("/new/:text_id", (req, res)=>{
+router.post("/new/:text_id", adminRequire, (req, res)=>{
     // 유효성 검사
     const text_id = req.params.text_id;
     const category = req.body.text_category;
@@ -410,7 +411,7 @@ router.post("/new/:text_id", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/:text_id", (req, res)=>{
+router.get("/:text_id", adminRequire, (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
     const query2 = 'SELECT text_id, title FROM text';
@@ -483,7 +484,7 @@ router.get("/:text_id", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.delete("/:text_id", (req, res)=>{
+router.delete("/:text_id", adminRequire, (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'DELETE FROM text WHERE text_id = ?';
     

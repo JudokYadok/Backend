@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { adminRequire } = require('./middleware');
 
 /**
  * @swagger
@@ -46,7 +47,7 @@ const router = express.Router();
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("", (req, res)=>{
+router.get("", adminRequire, (req, res)=>{
     const query = 'SELECT user_id, name FROM user';
     req.conn.query(query, (err, results) => {
         if (err) {
@@ -116,7 +117,7 @@ router.get("", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/:user_id", (req, res)=>{
+router.get("/:user_id", adminRequire, (req, res)=>{
     const user_id = req.params.user_id;
     const query = 'SELECT feedback_id, contents FROM feedback WHERE user_id = ?';
     const query2 = 'SELECT user_id, name FROM user';
