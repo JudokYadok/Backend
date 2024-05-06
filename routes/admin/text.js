@@ -95,6 +95,13 @@ router.get("", adminRequire, (req, res)=>{
  *                   result_req:
  *                     type: string
  *                     description: "오류 메시지"
+ *                   text_list:
+ *                     type: object
+ *                     description: "지문 목록"
+ *                     example:
+ *                       [
+ *                         { "text_id": 1000, "title": "지문1"}
+ *                       ]
  */
 router.get("/new", (req, res)=>{
     const query = 'SELECT text_id, title FROM text';
