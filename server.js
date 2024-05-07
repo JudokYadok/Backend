@@ -1,9 +1,14 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-
+const ejs = require('ejs');
 const app = express();
 const port = 60023;
+
+// ejs 사용 설정
+app.set("view engine", "ejs");
+app.set("views", "./views");
+app.use("/images", express.static(__dirname+"/public/images"));
 
 const swaggerOptions = {
     swaggerDefinition: {
