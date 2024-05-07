@@ -4,17 +4,35 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const session = require('express-session');
 const ejs = require('ejs');
 const mysql = require('mysql');
+const dbConfig = require('./dbconfig');
 
 const app = express();
 const port = 60023;
 
-/* 라우팅 모듈 */
+// 라우팅 모듈
 const adminMainRouter = require('./routes/admin/main');
 const adminAuthRouter = require('./routes/admin/auth');
 const manageUserRouter = require('./routes/admin/users');
 const manageTextRouter = require('./routes/admin/text');
 const manageFeedbackRouter = require('./routes/admin/feedback');
 // const manageAiRouter = require('./routes/admin/ai');
+
+// 세션 사용 설정
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'keyboard cat'
+    }));
+
+// 데이터 파싱
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+// ejs 사용 설정
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
+app.use("/images", express.static(__dirname+"/public/images"));
 
 // MySQL 연결 생성
 const connection = mysql.createConnection(dbConfig);
@@ -33,6 +51,14 @@ app.use((req, res, next) => {
     next();
 });
 
+// 라우팅
+app.use('/admin', adminMainRouter);
+app.use('/admin', adminAuthRouter);
+app.use('/admin/users', manageUserRouter);
+app.use('/admin/text', manageTextRouter);
+app.use('/admin/feedback', manageFeedbackRouter);
+// app.use('/admin/ai', manageAiRouter);
+
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -41,38 +67,19 @@ const swaggerOptions = {
             version: '1.0.0',
             description: '주독야독 API 문서',
         },
+        servers: [
+            {
+                url: "http://ceprj.gachon.ac.kr:" + port,
+            },
+        ],
     },
-    apis: ['./routes/admin/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
+    apis: ['./routes/admin/*.js', './routes/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
 }
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Swagger UI 설정
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-/* 데이터 파싱 */
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-
-/* 세션 사용 설정 */
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: 'keyboard cat'
-    }));
-
-/* ejs 사용 설정 */
-app.set("view engine", "ejs");
-app.set("views", "./views");
-
-
-// 관리자 기능 router 활성화
-app.use('/admin', adminMainRouter);
-app.use('/admin', adminAuthRouter);
-app.use('/admin/users', manageUserRouter);
-app.use('/admin/text', manageTextRouter);
-app.use('/admin/feedback', manageFeedbackRouter);
-// app.use('/admin/ai', manageAiRouter);
 
 // 서버 종료 시 MySQL 연결 종료
 process.on("SIGINT", () => {
