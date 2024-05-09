@@ -1,4 +1,4 @@
-const text = require('./models')
+const text = require('/home/t24123/models')
 const express = require("express");
 const router = express.Router();
 
@@ -69,4 +69,5 @@ const viewMyText = (req, res) => {
 router.get("/user/study/Mytext", selectMytextCategory);
 router.get("/user/study/Mytext/:category", selectMyText);
 router.get("/user/study/Mytext/:category/:text_id", viewMyText);
+
 module.exports = router;
