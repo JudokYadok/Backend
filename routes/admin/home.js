@@ -4,7 +4,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Admin-main
+ *   name: Admin-home
  *   description: 관리자 메인 화면 조회
  */
 
@@ -16,7 +16,7 @@ const router = express.Router();
  *     get:
  *       summary: "관리자 메인 화면 조회"
  *       description: "관리자 메인 화면 조회 요청으로 메인 페이지를 렌더링"
- *       tags: [Admin-main]
+ *       tags: [Admin-home]
  *       responses:
  *         "200":
  *           description: "관리자 메인 화면 조회 성공"

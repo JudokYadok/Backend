@@ -9,13 +9,18 @@ const dbConfig = require('./dbconfig');
 const app = express();
 const port = 60023;
 
-// 라우팅 모듈
+// 관리자 라우팅 모듈
 const adminMainRouter = require('./routes/admin/main');
 const adminAuthRouter = require('./routes/admin/auth');
 const manageUserRouter = require('./routes/admin/users');
 const manageTextRouter = require('./routes/admin/text');
 const manageFeedbackRouter = require('./routes/admin/feedback');
 // const manageAiRouter = require('./routes/admin/ai');
+
+// 사용자 라우팅 모듈
+const userTextRouter = require('./routes/user/study/usertext');
+const prevextRouter = require('./routes/user/study/prevtext');
+const myTextRouter = require('./routes/user/library/mytext');
 
 // 세션 사용 설정
 app.use(session({
@@ -51,13 +56,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// 라우팅
+// 관리자 라우팅 (Web)
 app.use('/admin', adminMainRouter);
 app.use('/admin', adminAuthRouter);
 app.use('/admin/users', manageUserRouter);
 app.use('/admin/text', manageTextRouter);
 app.use('/admin/feedback', manageFeedbackRouter);
 // app.use('/admin/ai', manageAiRouter);
+
+// 사용자 라우팅 (App)
+app.use('/')
 
 const swaggerOptions = {
     swaggerDefinition: {
