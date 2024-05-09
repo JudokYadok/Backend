@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/login", (req, res)=>{
     
-            req.session.user_id = 11;
+            req.session.user_id = 0;
             res.redirect('/admin/');
 
 });
