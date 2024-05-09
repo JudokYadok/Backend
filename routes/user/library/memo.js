@@ -26,6 +26,29 @@ const viewMemoList = (req, res) => {
     });
 };
 
+// 메모 조회
+const viewMemo = (req, res) => {
+    const { memo_id } = req.params; // URL 파라미터에서 text_id 추출
+  
+    Memo.findOne({
+        attributes: ['title', 'contents'],
+        where: {
+            // user_id: user_id, // 해당 사용자 메모만 검색
+            memo_id: memo_id
+      }
+    })
+    .then(MyMemo => {
+        if (MyMemo) {
+            res.json(MyMemo); // 조회된 메모를 JSON 형태로 응답
+        } else {
+            res.status(404).json({ error: 'Memo not found' }); // 해당 memo_id에 해당하는 Memo가 없는 경우
+        }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to fetch memo' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 // 메모 수정
 const modifyMemo = (req, res) => {
     const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
