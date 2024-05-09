@@ -50,7 +50,29 @@ const modifyMemo = (req, res) => {
     });
 };
 
+// 메모 삭제
+const deleteMemo = (req, res) => {
+    const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
+  
+    Memo.destroy({
+      where: {
+        memo_id: memo_id // 주어진 memo_id에 해당하는 행 삭제
+      }
+    })
+    .then(result => {
+      if (result !== 0) {
+        res.json({ message: 'Memo deleted successfully' }); // 삭제 성공 메시지 응답
+      } else {
+        res.status(404).json({ error: 'Memo not found' }); // 해당 memo_id에 해당하는 텍스트가 없는 경우 404 에러 응답
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to delete memo' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 router.get("/user/library/memo", viewMemoList);
 router.put("/user/library/memo", modifyMemo);
+router.delete("/user/library/memo", deleteMemo);
 
 module.exports = router;
