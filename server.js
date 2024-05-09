@@ -10,7 +10,7 @@ const app = express();
 const port = 60023;
 
 // 관리자 라우팅 모듈
-const adminMainRouter = require('./routes/admin/main');
+const adminMainRouter = require('./routes/admin/home');
 const adminAuthRouter = require('./routes/admin/auth');
 const manageUserRouter = require('./routes/admin/users');
 const manageTextRouter = require('./routes/admin/text');
