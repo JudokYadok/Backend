@@ -18,12 +18,10 @@ const manageFeedbackRouter = require('./routes/admin/feedback');
 const manageAiRouter = require('./routes/admin/ai');
 
 // 사용자 라우팅 모듈
-/*
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
 const myTextRouter = require('./routes/user/library/mytext');
-const { development } = require('../../../../config/dbconfig');
-*/
+const memoRouter = require('./routes/user/library/memo');
 
 // 세션 사용 설정
 app.use(session({
@@ -68,11 +66,10 @@ app.use('/admin/feedback', manageFeedbackRouter);
 app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
-/*
 app.use('/user/study/prevtext', prevTextRouter);
 app.use('/user/study/prevtext/:category', prevTextRouter);
 app.use('/user/study/prevtext/:category/:text_id', prevTextRouter);
-*/
+app.use('/user/library/memo', memoRouter);
 
 const swaggerOptions = {
     swaggerDefinition: {
