@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { adminRequire } = require('./middleware');
+
 
 /**
  * @swagger
@@ -29,7 +31,7 @@ const router = express.Router();
  *                     type: string
  *                     description: "결과 메시지"
  */
-router.get("", (req, res)=>{
+router.get("", adminRequire, (req, res)=>{
     res.status(200).render('ai_list', {
         result_req: "ai 관리 페이지 조회 성공"
     });
@@ -75,7 +77,7 @@ router.get("", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/token", (req, res)=>{
+router.get("/token", adminRequire, (req, res)=>{
     // ai에 요청 보내는 부분 추가
     res.status(200).render('ai_token', {
         result_req: "토큰 관리 페이지 조회 성공",
@@ -119,7 +121,7 @@ router.get("/token", (req, res)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-router.get("/answer", (req, res)=>{
+router.get("/answer", adminRequire, (req, res)=>{
     // ai에 요청 보내는 부분 추가
     res.status(200).render('ai_answer', {
         result_req: "실시간 답변 조회 성공",
