@@ -26,6 +26,31 @@ const viewMemoList = (req, res) => {
     });
 };
 
+// 메모 수정
+const modifyMemo = (req, res) => {
+    const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
+    const { contents } = req.body; // 요청에서 JSON 데이터 추출
+  
+    Memo.update({
+      contents: contents // 요청에서 받은 contents 값
+    }, {
+      where: {
+        memo_id: memo_id // 주어진 memo_id에 해당하는 행만 업데이트
+      }
+    })
+    .then(result => {
+      if (result[0] !== 0) {
+        res.json({ message: 'Memo modified successfully' }); // 수정 성공 메시지 응답
+      } else {
+        res.status(404).json({ error: 'Memo not found' }); // 해당 memo_id에 해당하는 텍스트가 없는 경우 404 에러 응답
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to modify memo' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 router.get("/user/library/memo", viewMemoList);
+router.put("/user/library/memo", modifyMemo);
 
 module.exports = router;
