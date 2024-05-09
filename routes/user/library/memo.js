@@ -1,4 +1,4 @@
-const { Text, Memo } = require('./models')
+const { Text, Memo } = require('/home/t24123/models')
 const express = require("express");
 const router = express.Router();
 
