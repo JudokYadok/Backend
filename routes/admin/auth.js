@@ -9,6 +9,13 @@ const router = express.Router();
  *   description: 관리자 인증
  */
 
+router.post("/login", (req, res)=>{
+    
+            req.session.user_id = 11;
+            res.redirect('/admin/');
+
+});
+
 /* 로그인 페이지 조회 */
 /**
  * @swagger

@@ -18,9 +18,12 @@ const manageFeedbackRouter = require('./routes/admin/feedback');
 const manageAiRouter = require('./routes/admin/ai');
 
 // 사용자 라우팅 모듈
+/*
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
 const myTextRouter = require('./routes/user/library/mytext');
+const { development } = require('../../../../config/dbconfig');
+*/
 
 // 세션 사용 설정
 app.use(session({
@@ -35,7 +38,7 @@ app.use(express.urlencoded({extended: true}));
 
 // ejs 사용 설정
 app.set("view engine", "ejs");
-app.set("views", "./views");
+app.set("views", "/home/t24123/src/v0.5src/web/backend/views");
 
 app.use("/images", express.static(__dirname+"/public/images"));
 
@@ -65,9 +68,11 @@ app.use('/admin/feedback', manageFeedbackRouter);
 app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
+/*
 app.use('/user/study/prevtext', prevTextRouter);
 app.use('/user/study/prevtext/:category', prevTextRouter);
 app.use('/user/study/prevtext/:category/:text_id', prevTextRouter);
+*/
 
 const swaggerOptions = {
     swaggerDefinition: {

@@ -168,8 +168,9 @@ router.post("/new", adminRequire, (req, res)=>{
     const title = req.body.text_title;
     const contents = req.body.text_contents;
     const user_id = req.session.user_id;
-    const query = "INSERT INTO text (user_id, category, title, contents) VALUES (?, ?, ?, ?)";
-    const values = [user_id, category, title, contents];
+    const createdat = new Date();
+    const query = "INSERT INTO text (user_id, category, title, contents, createdat, updatedat) VALUES (?, ?, ?, ?, ?, ?)";
+    const values = [user_id, category, title, contents, createdat, createdat];
 
     req.conn.query(query, values, (err, results) => {
         if (err) {
@@ -337,8 +338,9 @@ router.post("/new/:text_id", adminRequire, (req, res)=>{
     const category = req.body.text_category;
     const title = req.body.text_title;
     const contents = req.body.text_contents;
-    const query = "UPDATE text SET category = ?, title = ?, contents = ? WHERE text_id = ?";
-    const values = [category, title, contents, text_id];
+    const updatedat = new Date();
+    const query = "UPDATE text SET category = ?, title = ?, contents = ?, updatedat = ? WHERE text_id = ?";
+    const values = [category, title, contents, text_id, updatedat];
 
     req.conn.query(query, values, (err, results) => {
         if (err) {
