@@ -9,7 +9,7 @@ const selectPrevtextCategory = (req, res) => {
     text.findAll({
         attributes: ['category'], // category 필드만 선택
         where: {
-            user_id: 1 // 관리자 지문만 검색
+            user_id: 0 // 관리자 지문만 검색
     },
         group: ['category'] // 중복을 제거하기 위해 그룹화
     })
@@ -29,7 +29,7 @@ const selectPrevText = (req, res) => {
     text.findAll({
         attributes: ['title', 'year'],
         where: {
-            user_id: 1, // 관리자 지문만 검색
+            user_id: 0, // 관리자 지문만 검색
             category: category // 주어진 category에 해당하는 행만 검색
       }
     })
@@ -48,7 +48,7 @@ const viewPrevText = (req, res) => {
     text.findOne({
         attributes: ['title', 'year', 'contents'],
         where: {
-            user_id: 1, // 관리자 지문만 검색
+            user_id: 0, // 관리자 지문만 검색
             category: category, // 주어진 category에 해당하는 행만 검색
             text_id: text_id
       }

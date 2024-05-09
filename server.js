@@ -15,11 +15,11 @@ const adminAuthRouter = require('./routes/admin/auth');
 const manageUserRouter = require('./routes/admin/users');
 const manageTextRouter = require('./routes/admin/text');
 const manageFeedbackRouter = require('./routes/admin/feedback');
-// const manageAiRouter = require('./routes/admin/ai');
+const manageAiRouter = require('./routes/admin/ai');
 
 // 사용자 라우팅 모듈
 const userTextRouter = require('./routes/user/study/usertext');
-const prevextRouter = require('./routes/user/study/prevtext');
+const prevTextRouter = require('./routes/user/study/prevtext');
 const myTextRouter = require('./routes/user/library/mytext');
 
 // 세션 사용 설정
@@ -62,10 +62,12 @@ app.use('/admin', adminAuthRouter);
 app.use('/admin/users', manageUserRouter);
 app.use('/admin/text', manageTextRouter);
 app.use('/admin/feedback', manageFeedbackRouter);
-// app.use('/admin/ai', manageAiRouter);
+app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
-app.use('/')
+app.use('/user/study/prevtext', prevTextRouter);
+app.use('/user/study/prevtext/:category', prevTextRouter);
+app.use('/user/study/prevtext/:category/:text_id', prevTextRouter);
 
 const swaggerOptions = {
     swaggerDefinition: {
