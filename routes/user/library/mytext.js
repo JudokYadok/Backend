@@ -61,8 +61,35 @@ const addMytext = (req, res) => {
     });
 };
 
+// 사용자 지문 수정
+const modifyMytext = (req, res) => {
+    const { text_id } = req.params; // URL 파라미터에서 text_id 추출
+    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
+  
+    Text.update({
+      category: category, // 요청에서 받은 category 값
+      title: title, // 요청에서 받은 title 값
+      contents: contents // 요청에서 받은 contents 값
+    }, {
+      where: {
+        text_id: text_id // 주어진 text_id에 해당하는 행만 업데이트
+      }
+    })
+    .then(result => {
+      if (result[0] !== 0) {
+        res.json({ message: 'Text modified successfully' }); // 수정 성공 메시지 응답
+      } else {
+        res.status(404).json({ error: 'Text not found' }); // 해당 text_id에 해당하는 텍스트가 없는 경우 404 에러 응답
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to modify text' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 router.get("/user/library/Mytext", viewMytextList);
 router.get("/user/library/Mytext/:text_id", viewMytext);
 router.post("/user/library/Mytext", addMytext);
+router.put("/user/library/Mytext", modifyMytext);
 
 module.exports = router;
