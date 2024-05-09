@@ -1,4 +1,3 @@
-const text = require('/home/t24123/models')
 const express = require("express");
 const router = express.Router();
 

@@ -1,13 +1,11 @@
-const { Text, Memo } = require('/home/t24123/models')
 const express = require("express");
 const router = express.Router();
 
 // 메모 목록 조회
 const viewMemoList = (req, res) => {
   const query = `
-      SELECT memos.updatedAt, texts.title
-      FROM memos
-      INNER JOIN texts ON memos.text_id = texts.text_id;
+      SELECT memo.updatedAt, memo.title
+      FROM memo
   `;
 
   req.conn.query(query, (err, memos) => {
@@ -31,7 +29,7 @@ const viewMemo = (req, res) => {
 
   const query = `
       SELECT title, contents
-      FROM memos
+      FROM memo
       WHERE memo_id = ?;
   `;
   const values = [memo_id];
@@ -51,13 +49,35 @@ const viewMemo = (req, res) => {
   });
 };
 
+// 메모 추가
+const addMemo = (req, res) => {
+  const { title, contents } = req.body; // 요청에서 JSON 데이터 추출
+
+  const query = `
+      INSERT INTO memo (title, contents)
+      VALUES (?, ?);
+  `;
+  const values = [title, contents];
+
+  req.conn.query(query, values, (err, result) => {
+    if (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to add memo to the library' });
+        return;
+    }
+
+    // 새로 추가된 텍스트의 ID를 포함하여 응답
+    res.json({ memo_id: result.insertId, title, contents });
+});
+};
+
 // 메모 수정
 const modifyMemo = (req, res) => {
   const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
   const { contents } = req.body; // 요청에서 JSON 데이터 추출
 
   const query = `
-      UPDATE memos
+      UPDATE memo
       SET contents = ?
       WHERE memo_id = ?;
   `;
@@ -83,7 +103,7 @@ const deleteMemo = (req, res) => {
   const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
 
   const query = `
-      DELETE FROM memos
+      DELETE FROM memo
       WHERE memo_id = ?;
   `;
   const values = [memo_id];
@@ -105,7 +125,9 @@ const deleteMemo = (req, res) => {
 
 
 router.get("/user/library/memo", viewMemoList);
-router.put("/user/library/memo", modifyMemo);
-router.delete("/user/library/memo", deleteMemo);
+router.get("/user/library/memo/:memo_id", viewMemo);
+router.post("/user/library/memo", addMemo);
+router.put("/user/library/memo/:memo_id", modifyMemo);
+router.delete("/user/library/memo/:memo_id", deleteMemo);
 
 module.exports = router;
