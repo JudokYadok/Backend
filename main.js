@@ -85,7 +85,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./routes/admin/*.js', './routes/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
+    apis: ['/home/t24123/src/v0.5src/web/backend/routes/admin/*.js', '/home/t24123/src/v0.5src/web/backend/routes/user/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
 }
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
