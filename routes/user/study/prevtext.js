@@ -22,6 +22,26 @@ const selectPrevtextCategory = (req, res) => {
     });
 };
 
+// 기출 지문 선택 화면 조회
+const selectPrevText = (req, res) => {
+    const category = req.params.category; // URL 파라미터에서 category 추출
+  
+    text.findAll({
+        attributes: ['title', 'year'],
+        where: {
+            user_id: 1, // 관리자 지문만 검색
+            category: category // 주어진 category에 해당하는 행만 검색
+      }
+    })
+    .then(prevTexts => {
+      res.json(prevTexts); // 조회된 지문 리스트를 JSON 형태로 응답
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to fetch previous texts' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 router.get("/user/study/prevtext", selectPrevtextCategory);
+router.get("/user/study/prevtext/:category", selectPrevText);
 
 module.exports = router;
