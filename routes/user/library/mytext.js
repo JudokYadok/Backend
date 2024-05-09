@@ -42,7 +42,27 @@ const viewMytext = (req, res) => {
     });
 };
 
+// 사용자 지문 추가
+const addMytext = (req, res) => {
+    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
+    const user_id = user_id; // 사용자 ID
+  
+    Text.create({
+      user_id: user_id, // 현재 로그인한 사용자의 ID
+      category: category, // 요청에서 받은 category 값
+      title: title, // 요청에서 받은 title 값
+      contents: contents // 요청에서 받은 contents 값
+    })
+    .then(text => {
+      res.json(text); // 추가된 텍스트 정보를 JSON 형태로 응답
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to add text to the library' }); // 오류 발생 시 500 에러 응답
+    });
+};
+
 router.get("/user/library/Mytext", viewMytextList);
 router.get("/user/library/Mytext/:text_id", viewMytext);
+router.post("/user/library/Mytext", addMytext);
 
 module.exports = router;
