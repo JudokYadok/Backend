@@ -99,9 +99,9 @@ const modifyMytext = (req, res) => {
   });
 };
 
-router.get("/user/library/Mytext", viewMytextList);
-router.get("/user/library/Mytext/:text_id", viewMytext);
-router.post("/user/library/Mytext", addMytext);
-router.put("/user/library/Mytext", modifyMytext);
+router.get("/", viewMytextList);
+router.get("/:text_id", viewMytext);
+router.post("/", addMytext);
+router.put("/", modifyMytext);
 
 module.exports = router;

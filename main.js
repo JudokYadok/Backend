@@ -67,8 +67,8 @@ app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
 app.use('/user/study/prevtext', prevTextRouter);
-app.use('/user/study/prevtext/:category', prevTextRouter);
-app.use('/user/study/prevtext/:category/:text_id', prevTextRouter);
+app.use('/user/study/usertext', userTextRouter);
+app.use('/user/library/mytext', myTextRouter);
 app.use('/user/library/memo', memoRouter);
 
 const swaggerOptions = {

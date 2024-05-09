@@ -75,8 +75,8 @@ const viewPrevText = (req, res) => {
 };
 
 
-router.get("/user/study/prevtext", selectPrevtextCategory);
-router.get("/user/study/prevtext/:category", selectPrevText);
-router.get("/user/study/prevtext/:category/:text_id", viewPrevText);
+router.get("/", selectPrevtextCategory);
+router.get("/:category", selectPrevText);
+router.get("/:category/:text_id", viewPrevText);
 
 module.exports = router;

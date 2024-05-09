@@ -73,8 +73,8 @@ const viewMyText = (req, res) => {
 };
 
 
-router.get("/user/study/Mytext", selectMytextCategory);
-router.get("/user/study/Mytext/:category", selectMyText);
-router.get("/user/study/Mytext/:category/:text_id", viewMyText);
+router.get("/", selectMytextCategory);
+router.get("/:category", selectMyText);
+router.get(":category/:text_id", viewMyText);
 
 module.exports = router;
