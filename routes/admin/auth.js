@@ -2,12 +2,6 @@ const express = require('express');
 const router = express.Router();
 // const crypto = require('crypto');
 
-// Admin table 작성 전 테스트용 로그인 API
-router.post("/login", (req, res)=>{
-    req.session.user_id = 0;
-    res.redirect('/admin/');
-});
-
 /**
  * @swagger
  * tags:
