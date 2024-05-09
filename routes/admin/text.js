@@ -340,7 +340,7 @@ router.post("/new/:text_id", adminRequire, (req, res)=>{
     const contents = req.body.text_contents;
     const updatedat = new Date();
     const query = "UPDATE text SET category = ?, title = ?, contents = ?, updatedat = ? WHERE text_id = ?";
-    const values = [category, title, contents, text_id, updatedat];
+    const values = [category, title, contents, updatedat, text_id];
 
     req.conn.query(query, values, (err, results) => {
         if (err) {
