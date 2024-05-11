@@ -6,10 +6,10 @@ const redisClient = require('/home/t24123/src/v0.5src/web/backend/utils/redis')
 
 // 로그인
 router.get('/login', async (req, res) => {  // 경로 수정
-    const query = 'SELECT * FROM user WHERE kakao_id = ?';
-    const query2 = 'INSERT INTO user (kakao_id, name, email) VALUES (?, ?, ?)';
+    const query = 'SELECT * FROM `user` WHERE kakao_id = ?';
+    const query2 = 'INSERT INTO `user` (kakao_id, name, email) VALUES (?, ?, ?)';
     const kakao_token = req.headers["authorization"];
-  
+    
     // 사용자 정보 가져오기
     try{
         userinfo = await axios({    // kakao 서버에서 사용자 정보 가져와 userinfo에 저장
@@ -23,13 +23,17 @@ router.get('/login', async (req, res) => {  // 경로 수정
         console.error(err);
     }
 
+    console.log(userinfo.data.id);
     // 전달 형식 참고: https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#req-user-info
-    const kakao_id = userinfo.data.id;
+    let kakao_id = userinfo.data.id;
+    kakao_id = kakao_id.toString();
     const user_name = userinfo.data.properties.nickname;
     //const user_pic = userinfo.data.properties.profile_image;
     const user_email = userinfo.data.kakao_account.email;
 
     const values = [kakao_id, user_name, user_email];
+
+    console.log(typeof kakao_id);
 
     req.conn.query(query, kakao_id, (err, results) => { // user 테이블에 회원 정보가 존재하는지 확인
         if (err) {
@@ -39,6 +43,8 @@ router.get('/login', async (req, res) => {  // 경로 수정
             });
             return;
         }
+
+        console.log(results.length);
 
         if(results.length === 0){   // 계정 정보가 없으면 회원가입 처리
             req.conn.query(query2, values, (err, results2) => {
@@ -51,31 +57,33 @@ router.get('/login', async (req, res) => {  // 경로 수정
                 }
 
                 console.log("회원가입 성공");
+
             });
         }
 
-    });
-
-    req.conn.query(query, kakao_id, (err, results) => { // user 테이블에 회원 정보가 존재하는지 확인
-        if (err) {
-            console.error(err);
-            res.status(500).json({
-                result_req: err.message
+        req.conn.query(query, kakao_id, (err, results3) => { // user 테이블에 회원 정보가 존재하는지 확인
+            if (err) {
+                console.error(err);
+                res.status(500).json({
+                    result_req: err.message
+                });
+                return;
+            }
+    
+            console.log(results3[0]);
+    
+            const access_token = jwt.sign(results3[0].user_id);
+            const refresh_token = jwt.refresh();
+    
+            redisClient.set(results3[0].user_id, refresh_token);
+    
+            // user_id, createdAt, access_token, refresh_token 전달
+            res.status(200).send({
+                user_id: results3[0].user_id,
+                createdAt: results3[0].createdAt,
+                access_token: access_token,
+                refresh_token: refresh_token
             });
-            return;
-        }
-
-        const access_token = jwt.sign(user_id);
-        const refresh_token = jwt.refresh();
-
-        redisClient.set(user_id, refresh_token);
-
-        // user_id, createdAt, access_token, refresh_token 전달
-        res.status(200).send({
-            user_id: results[0].user_id,
-            createdAt: results[0].createdAt,
-            access_token: access_token,
-            refresh_token: refresh_token
         });
     });
     
