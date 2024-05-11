@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const jwt = require('/home/t24123/src/v0.5src/web/backend/utils/jwt-util');
+const redisClient = require('/home/t24123/src/v0.5src/web/backend/utils/redis')
 
 // 로그인
 router.get('/login', async (req, res) => {  // 경로 수정
@@ -47,7 +49,7 @@ router.get('/login', async (req, res) => {  // 경로 수정
                     });
                     return;
                 }
-                
+
                 console.log("회원가입 성공");
             });
         }
