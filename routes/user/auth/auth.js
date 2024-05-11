@@ -47,6 +47,8 @@ router.get('/login', async (req, res) => {  // 경로 수정
                     });
                     return;
                 }
+                
+                console.log("회원가입 성공");
             });
         }
 
