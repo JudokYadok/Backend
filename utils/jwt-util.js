@@ -5,10 +5,9 @@ const secret = process.env.SECRET;
 
 
 module.exports = {
-  sign: (user) => { // access token 발급
+  sign: (user_id) => { // access token 발급
     const payload = { // access token에 들어갈 payload
-      id: user.id,
-      role: user.role,
+      id: user_id,
     };
 
     return jwt.sign(payload, secret, { // secret으로 sign하여 발급하고 return

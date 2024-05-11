@@ -8,7 +8,7 @@ const redisClient = require('/home/t24123/src/v0.5src/web/backend/utils/redis')
 router.get('/login', async (req, res) => {  // 경로 수정
     const query = 'SELECT * FROM user WHERE kakao_id = ?';
     const query2 = 'INSERT INTO user (kakao_id, name, email) VALUES (?, ?, ?)';
-    const access_token = req.headers["authorization"];
+    const kakao_token = req.headers["authorization"];
   
     // 사용자 정보 가져오기
     try{
@@ -16,7 +16,7 @@ router.get('/login', async (req, res) => {  // 경로 수정
             method:'get',
             url:'https://kapi.kakao.com/v2/user/me',
             headers:{
-                Authorization: `Bearer ${access_token}`
+                Authorization: `Bearer ${kakao_token}`
             }
         });
     } catch(err) {
@@ -54,9 +54,31 @@ router.get('/login', async (req, res) => {  // 경로 수정
             });
         }
 
-        // user_id, createdAt, access_token, refresh_token 전달
-        req.status(200).send({});
     });
+
+    req.conn.query(query, kakao_id, (err, results) => { // user 테이블에 회원 정보가 존재하는지 확인
+        if (err) {
+            console.error(err);
+            res.status(500).json({
+                result_req: err.message
+            });
+            return;
+        }
+
+        const access_token = jwt.sign(user_id);
+        const refresh_token = jwt.refresh();
+
+        redisClient.set(user_id, refresh_token);
+
+        // user_id, createdAt, access_token, refresh_token 전달
+        res.status(200).send({
+            user_id: results[0].user_id,
+            createdAt: results[0].createdAt,
+            access_token: access_token,
+            refresh_token: refresh_token
+        });
+    });
+    
 });
 
 // 로그아웃
