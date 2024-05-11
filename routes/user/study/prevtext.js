@@ -28,7 +28,7 @@ const selectPrevText = (req, res) => {
   const category = req.params.category; // URL 파라미터에서 category 추출
 
   const query = `
-      SELECT title, year
+      SELECT text_id, title, year
       FROM text
       WHERE user_id = 0
       AND category = ?;

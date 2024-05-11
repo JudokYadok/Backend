@@ -18,6 +18,7 @@ const manageFeedbackRouter = require('./routes/admin/feedback');
 const manageAiRouter = require('./routes/admin/ai');
 
 // 사용자 라우팅 모듈
+const userAuthRouter = require('./routes/user/auth/auth');
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
 const myTextRouter = require('./routes/user/library/mytext');
@@ -66,8 +67,9 @@ app.use('/admin/feedback', manageFeedbackRouter);
 app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
+app.use('/user', userAuthRouter);
 app.use('/user/study/prevtext', prevTextRouter);
-app.use('/user/study/usertext', userTextRouter);
+app.use('/user/study/mytext', userTextRouter);
 app.use('/user/library/mytext', myTextRouter);
 app.use('/user/library/memo', memoRouter);
 
