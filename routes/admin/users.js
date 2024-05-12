@@ -158,8 +158,14 @@ router.get("/:user_id", adminRequire, (req, res)=>{
                     user_id: user_data.user_id,
                     user_email: user_data.email,
                     user_name: user_data.name,
-                    user_createdAt: user_data.createdAt.getFullYear() + '-' + user_data.createdAt.getMonth() + '-' + user_data.createdAt.getDate(),
-                    user_d_day: user_data.d_day.getFullYear() + '-' + user_data.d_day.getMonth() + '-' + user_data.d_day.getDate()   // DB 설계 변경 후 재수정
+                    user_createdAt: user_data.createdAt ? 
+                                    user_data.createdAt.getFullYear() + '-' +
+                                    user_data.createdAt.getMonth() + '-' +
+                                    user_data.createdAt.getDate() :
+                                    null,
+                    user_d_day: user_data.d_day ? 
+                                `${user_data.d_day.getFullYear()}-${user_data.d_day.getMonth()}-${user_data.d_day.getDate()}` :
+                                null,
                 });
             })
         } else {

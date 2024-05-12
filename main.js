@@ -24,6 +24,8 @@ const prevTextRouter = require('./routes/user/study/prevtext');
 const myTextRouter = require('./routes/user/library/mytext');
 const memoRouter = require('./routes/user/library/memo');
 
+const testQuizRouter = require('./routes/user/study/testquiz');
+
 // 세션 사용 설정
 app.use(session({
     resave: false,
@@ -37,7 +39,7 @@ app.use(express.urlencoded({extended: true}));
 
 // ejs 사용 설정
 app.set("view engine", "ejs");
-app.set("views", "/home/t24123/src/v0.5src/web/backend/views");
+app.set("views", "/home/t24123/src/v0.9src/web/backend/views");
 
 app.use("/images", express.static(__dirname+"/public/images"));
 
@@ -72,6 +74,7 @@ app.use('/user/study/prevtext', prevTextRouter);
 app.use('/user/study/mytext', userTextRouter);
 app.use('/user/library/mytext', myTextRouter);
 app.use('/user/library/memo', memoRouter);
+app.use('/user/study/prevtext/test', testQuizRouter);
 
 const swaggerOptions = {
     swaggerDefinition: {

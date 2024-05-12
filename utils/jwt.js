@@ -27,6 +27,7 @@ module.exports = {
         } catch (err) {
             return {
                 ok: false,
+                id: decoded.id,
                 message: err.message,
             };
         }

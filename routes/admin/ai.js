@@ -81,13 +81,13 @@ router.get("/token", adminRequire, (req, res)=>{
     // ai에 요청 보내는 부분 추가
     res.status(200).render('ai_token', {
         result_req: "토큰 관리 페이지 조회 성공",
-        prompt_tokens: 100, // 임시 값
-        completion_tokens: 100, // 임시 값
-        total_cost: "사용 요금" // 임시 값
+        prompt_tokens: 2348, // 임시 값
+        completion_tokens: 1213, // 임시 값
+        total_cost: "$0.14322" // 임시 값
     });
 });
 
-/* 실시간 답변 출력 페이지 조회 */
+/* 모델 정보 페이지 조회 */
 /**
  * @swagger
  * paths:
@@ -125,7 +125,22 @@ router.get("/answer", adminRequire, (req, res)=>{
     // ai에 요청 보내는 부분 추가
     res.status(200).render('ai_answer', {
         result_req: "실시간 답변 조회 성공",
-        answer: "실시간 답변"   // 임시 값
+        answer: `
+        "lc": 1,
+              "type": "constructor",
+              "id": [
+                "langchain",
+                "prompt",
+                "chat",
+                "ChatPromptValue"
+              ],
+              "kwargs": {
+                "content": "text\n52*365\n\n...numexpr.evaluate(\"52*365\")...\n",
+                "additional_kwargs": {}
+              },
+              "model_name" : "gpt-4-1106-preview"
+        
+        `
     });
 });
 
