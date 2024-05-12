@@ -122,25 +122,13 @@ router.get("/token", adminRequire, (req, res)=>{
  *                     description: "오류 메시지"
  */
 router.get("/answer", adminRequire, (req, res)=>{
-    // ai에 요청 보내는 부분 추가
     res.status(200).render('ai_answer', {
-        result_req: "실시간 답변 조회 성공",
-        answer: `
-        "lc": 1,
-              "type": "constructor",
-              "id": [
-                "langchain",
-                "prompt",
-                "chat",
-                "ChatPromptValue"
-              ],
-              "kwargs": {
-                "content": "text\n52*365\n\n...numexpr.evaluate(\"52*365\")...\n",
-                "additional_kwargs": {}
-              },
-              "model_name" : "gpt-4-1106-preview"
-        
+        result_req: "모델 정보 조회 성공",
+        answer: `모델명: gpt-4-1106-preview <br><br>
+        type: constructor <br><br>
+        id: [ "langchain", "prompt", "chat", "ChatPromptValue" ] <br>
         `
+
     });
 });
 
