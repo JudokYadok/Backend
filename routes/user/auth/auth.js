@@ -66,6 +66,7 @@ const sendData = async (res, userdata) => {
 // 로그인
 const login = async (req, res) => {
     const kakao_token = req.headers["authorization"];
+    console.log(kakao_token);
 
     try {
         const kakao_data = await getKaKaoUserdata(kakao_token);
@@ -94,21 +95,7 @@ router.get('/login', login);
 
 // 로그아웃
 router.get('/logout', async (req, res) => {
-    const access_token = req.body.access_token; // 형식 확인 후 수정
-
-    try{
-        console.log(access_token);
-        logout_result = await axios({    // 로그아웃 처리(성공 시 아이디 반환됨)
-            method:'post',
-            url:'https://kapi.kakao.com/v1/user/logout',
-            headers:{
-                Authorization: `Bearer ${access_token}`
-            }
-        });
-    } catch(err) {
-        console.error(err);
-    }
-
+    
 });
 
 module.exports = router;
