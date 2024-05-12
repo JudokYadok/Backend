@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { adminRequire } = require('./middleware');
+const { adminRequire } = require('../../utils/middleware');
 
 
 /**
