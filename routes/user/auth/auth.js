@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const { generateToken, refreshToken } = require('../../../utils/jwt-util.js');
+const jwt = require('../../../utils/jwt.js');
 
 // 카카오 서버에서 사용자 정보 가져오기
 const getKaKaoUserdata = async (kakao_token) => {
@@ -51,12 +51,8 @@ const signUp = async (req, res, values) => {
 
 // 토큰 생성
 const sendData = async (res, userdata) => {
-    const payload = {
-        user_id: userdata.user_id,
-    };
-
-    const access_token = generateToken(payload);
-    const refresh_token = refreshToken();
+    const access_token = jwt.sign(userdata.user_id);
+    const refresh_token = jwt.refresh();
 
     // user_id, createdAt, access_token, refresh_token 전달
     res.status(200).send({
