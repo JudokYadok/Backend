@@ -18,6 +18,7 @@ const manageFeedbackRouter = require('./routes/admin/feedback');
 const manageAiRouter = require('./routes/admin/ai');
 
 // 사용자 라우팅 모듈
+const userAuthRouter = require('./routes/user/auth/auth');
 /*
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
@@ -68,6 +69,7 @@ app.use('/admin/feedback', manageFeedbackRouter);
 app.use('/admin/ai', manageAiRouter);
 
 // 사용자 라우팅 (App)
+app.use('/user', userAuthRouter);
 /*
 app.use('/user/study/prevtext', prevTextRouter);
 app.use('/user/study/prevtext/:category', prevTextRouter);
@@ -88,7 +90,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./routes/admin/*.js', './routes/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
+    apis: ['/home/t24123/src/v0.5src/web/backend/routes/admin/*.js', '/home/t24123/src/v0.5src/web/backend/routes/user/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
 }
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
