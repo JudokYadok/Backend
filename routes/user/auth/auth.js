@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const jwt = require('../../../utils/jwt.js');
+const jwt = require('../../../utils/jwt');
 
 // 카카오 서버에서 사용자 정보 가져오기
 const getKaKaoUserdata = async (kakao_token) => {
@@ -54,6 +54,8 @@ const sendData = async (res, userdata) => {
     const access_token = jwt.sign(userdata.user_id);
     const refresh_token = jwt.refresh();
 
+    console.log('토큰 발급: ', access_token);
+
     // user_id, createdAt, access_token, refresh_token 전달
     res.status(200).send({
         user_id: userdata.user_id,
@@ -65,10 +67,9 @@ const sendData = async (res, userdata) => {
 
 // 로그인
 const login = async (req, res) => {
-    const kakao_token = req.headers["authorization"];
-    console.log(kakao_token);
-
     try {
+        const kakao_token = req.headers.authorization;
+        console.log(kakao_token);
         const kakao_data = await getKaKaoUserdata(kakao_token);
         const kakao_id = kakao_data.id.toString();
         const user_name = kakao_data.properties.nickname;
@@ -85,6 +86,7 @@ const login = async (req, res) => {
 
         await sendData(res, user_data[0]);
     } catch (err) {
+        console.error(error);
         res.status(500).json({
             result_req: err.message
         });
@@ -92,10 +94,5 @@ const login = async (req, res) => {
 };
 
 router.get('/login', login);
-
-// 로그아웃
-router.get('/logout', async (req, res) => {
-    
-});
 
 module.exports = router;

@@ -16,13 +16,13 @@ const aiTest = () => {
 
     pythonProcess.on('close', (code) => {
         console.log(`child process 종료 : ${code}`);
-        console.log('Received Data:', result); // 데이터 출력
+        console.log('Received Data: \n', result); // 데이터 출력
 
         try {
             const parsedResponse = JSON.parse(result);
             console.log(parsedResponse);
 
-            fs.writeFile('result7.json', result, (err) => {
+            fs.writeFile('result8.json', result, (err) => {
                 if(err) {
                     console.error('JSON file writing Error', err);
                 } else {

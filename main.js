@@ -4,6 +4,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const session = require('express-session');
 const ejs = require('ejs');
 const mysql = require('mysql');
+const child_process = require('child_process');
 const dbConfig = require('./dbconfig');
 
 const app = express();
@@ -21,9 +22,11 @@ const manageAiRouter = require('./routes/admin/ai');
 const userAuthRouter = require('./routes/user/auth/auth');
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
+const prevtextQuizRouter = require('./routes/user/study/prevquiz');
+// const usertextQuizRouter = require('./routes/user/study/userquiz');
 const myTextRouter = require('./routes/user/library/mytext');
 const memoRouter = require('./routes/user/library/memo');
-
+const myPageRouter = require('./routes/user/setting/mypage.js');
 const testQuizRouter = require('./routes/user/study/testquiz');
 
 // 세션 사용 설정
@@ -74,7 +77,10 @@ app.use('/user/study/prevtext', prevTextRouter);
 app.use('/user/study/mytext', userTextRouter);
 app.use('/user/library/mytext', myTextRouter);
 app.use('/user/library/memo', memoRouter);
+app.use('/user/setting/mypage', myPageRouter);
 app.use('/user/study/prevtext/test', testQuizRouter);
+app.use('/user/study/prevtext/:category/:text_id/quiz', prevtextQuizRouter);
+// app.use('/user/study/mytext/:category/:text_id/quiz', usertextQuizRouter);
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -90,7 +96,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['/home/t24123/src/v0.5src/web/backend/routes/admin/*.js', '/home/t24123/src/v0.5src/web/backend/routes/user/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
+    apis: ['/home/t24123/src/v0.9src/web/backend/routes/admin/*.js', '/home/t24123/src/v0.9src/web/backend/routes/user/*.js'],  // 필요 시 배열 형식으로 파일 경로 추가
 }
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

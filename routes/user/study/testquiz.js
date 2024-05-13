@@ -1,28 +1,62 @@
 const { spawn } = require("child_process");
-const router = require("./usertext");
+const express = require('express');
+const router = express.Router();
 
 const createTestQuiz = (req, res) => {
-    // const { category, text_id } = req.params;
-    // const { someDataFromBody } = req.body;
-
     // content_match.py 실행
-    const pythonProcess = spawn('python', ['/home/t24123/src/v0.5src/ai/content_match.py']);
+    const query = `
+      SELECT contents
+      FROM text
+      WHERE text_id = 2
+  `;
+    let text = '';
 
-    let result = '';
+    // 데이터베이스에서 쿼리 실행
+    req.conn.query(query, (err, textfile) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return;
+        }
+        // 쿼리 결과에서 텍스트 가져오기
+        text = textfile[0].contents;
 
-    pythonProcess.stdout.on('data', (data) => {
-        result += data.toString();
-    });
+        const pythonProcess = spawn('python', ['/home/t24123/src/v0.9src/ai/content_match.py', text]);
 
-    pythonProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-        res.status(500).send("An error occurred while processing the request.");
-    });
+        let quiz = '';
+        let errorOccurred = false; // 에러 발생 여부를 나타내는 변수
 
-    pythonProcess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        // 여기서 한 번만 응답을 보냅니다.
-        res.json(result);
+        pythonProcess.stdout.on('data', (data) => {
+            quiz += data.toString();
+        });
+
+        pythonProcess.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+            console.log('Received Data: \n', quiz);
+            console.log(errorOccurred);
+            // 파이썬 프로세스가 종료된 후에 에러가 발생하지 않았다면 응답을 보냄
+            if (!errorOccurred) {
+                try {
+                    const parsedResponse = JSON.parse(quiz);
+                    console.log(parsedResponse);
+
+                    res.status(200).json(parsedResponse);
+                } catch (error) {
+                    console.error('JSON parsing Error', error);
+                }
+            }
+        });
+
+        pythonProcess.stderr.on('data', (data) => {
+            const errorMessage = data.toString();
+            if (errorMessage.includes('LangChainDeprecationWarning')) {
+                // LangChainDeprecationWarning과 같은 경고 메시지는 무시
+                return;
+            }
+
+            console.error(`stderr: ${errorMessage}`);
+            // 에러가 발생했음을 표시
+            errorOccurred = true;
+        });
     });
 };
 
