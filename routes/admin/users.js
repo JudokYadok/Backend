@@ -160,7 +160,7 @@ router.get("/:user_id", adminRequire, (req, res)=>{
                     user_name: user_data.name,
                     user_createdAt: user_data.createdAt ? 
                                     user_data.createdAt.getFullYear() + '-' +
-                                    user_data.createdAt.getMonth() + '-' +
+                                    (user_data.createdAt.getMonth()+1) + '-' +
                                     user_data.createdAt.getDate() :
                                     null,
                     user_d_day: user_data.d_day ? 

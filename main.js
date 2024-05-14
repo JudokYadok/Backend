@@ -79,7 +79,7 @@ app.use('/user/library/mytext', myTextRouter);
 app.use('/user/library/memo', memoRouter);
 app.use('/user/setting/mypage', myPageRouter);
 app.use('/user/study/prevtext/test', testQuizRouter);
-app.use('/user/study/prevtext/:category/:text_id/quiz', prevtextQuizRouter);
+app.use('/user/study/prevtext', prevtextQuizRouter);
 // app.use('/user/study/mytext/:category/:text_id/quiz', usertextQuizRouter);
 
 const swaggerOptions = {

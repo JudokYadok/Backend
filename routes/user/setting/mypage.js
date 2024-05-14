@@ -4,7 +4,7 @@ const router = express.Router();
 // 마이 페이지 조회
 const viewMyPage = (req, res) => {
     const { user_id } = req.params; // URL 파라미터에서 user_id 추출
-  
+    const user_dday = null;
     const query = `
         SELECT *
         FROM user
@@ -22,6 +22,19 @@ const viewMyPage = (req, res) => {
         if (result.length === 0) {
             res.status(404).json({ error: 'User not found' });
         } else {
+            if(result[0].d_day){
+                user_dday = {
+                    year: result[0].d_day.getFullYear(),
+                    month: result[0].d_day.getMonth() + 1,
+                    date: result[0].d_day.getDate()
+                }
+            }else{
+                user_dday = {
+                    year: 0,
+                    month: 0,
+                    date: 0
+                }
+            }
             const userdata = {
                 user_id: result[0].user_id,
                 kakao_id: result[0].kakao_id,
@@ -29,11 +42,7 @@ const viewMyPage = (req, res) => {
                 name: result[0].name,
                 createdAt: result[0].createdAt,
                 updatedAt: result[0].updatedAt,
-                d_day: {
-                    year: result[0].d_day.getFullYear(),
-                    month: result[0].d_day.getMonth(),
-                    date: result[0].d_day.getDate()
-                }
+                d_day: user_dday,
             }
             res.json(userdata); // 조회된 지문을 JSON 형태로 응답
         }
