@@ -86,7 +86,7 @@ const login = async (req, res) => {
 
         await sendData(res, user_data[0]);
     } catch (err) {
-        console.error(error);
+        console.error(err);
         res.status(500).json({
             result_req: err.message
         });
