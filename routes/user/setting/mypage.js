@@ -12,17 +12,30 @@ const viewMyPage = (req, res) => {
     `;
     const values = [user_id];
   
-    req.conn.query(query, values, (err, userdata) => {
+    req.conn.query(query, values, (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Failed to fetch user info' });
             return;
         }
   
-        if (userdata.length === 0) {
+        if (result.length === 0) {
             res.status(404).json({ error: 'User not found' });
         } else {
-            res.json(userdata[0]); // 조회된 지문을 JSON 형태로 응답
+            const userdata = {
+                user_id: result[0].user_id,
+                kakao_id: result[0].kakao_id,
+                email: result[0].email,
+                name: result[0].name,
+                createdAt: result[0].createdAt,
+                updatedAt: result[0].updatedAt,
+                d_day: {
+                    year: result[0].d_day.getFullYear(),
+                    month: result[0].d_day.getMonth(),
+                    date: result[0].d_day.getDate()
+                }
+            }
+            res.json(userdata); // 조회된 지문을 JSON 형태로 응답
         }
     });
   };
@@ -35,7 +48,9 @@ const updateMyPage = (req, res) => {
         SET name = ?, email = ?, d_day = ?
         WHERE user_id = ?;
     `;
-    const values = [name, email, d_day, user_id];
+
+    const dday = new Date(d_day[0], d_day[1]-1, d_day[2], 0, 0);
+    const values = [name, email, dday, user_id];
   
     req.conn.query(query, values, (err, userdata) => {
         if (err) {
