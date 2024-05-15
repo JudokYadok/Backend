@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../envenv').JWT_SECRET_KEY;
+const refresh_secret = require('../envenv').REFRESH_SECRET_KEY;
 
 module.exports = {
 
@@ -32,7 +33,7 @@ module.exports = {
     },
 
     refresh: () => { // refresh token 발급
-        return jwt.sign({}, secret, {
+        return jwt.sign({}, refresh_secret, {
             algorithm: 'HS256',
             expiresIn: '14d',
         });
