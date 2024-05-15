@@ -30,7 +30,7 @@ const viewMytext = (req, res) => {
   const query = `
       SELECT title, year, contents
       FROM text
-      WHERE user_id = ?, text_id = ?;
+      WHERE user_id = ? AND text_id = ?;
   `;
   const values = [user_id, text_id];
 
@@ -80,7 +80,7 @@ const modifyMytext = (req, res) => {
   const query = `
       UPDATE text 
       SET category = ?, title = ?, contents = ? 
-      WHERE user_id = ?, text_id = ?;
+      WHERE user_id = ? AND text_id = ?;
   `;
   const values = [category, title, contents, user_id, text_id];
 

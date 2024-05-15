@@ -34,7 +34,7 @@ const viewMemo = (req, res) => {
   const query = `
       SELECT memo_id, title, contents
       FROM memo
-      WHERE user_id = ?, memo_id = ?;
+      WHERE user_id = ? AND memo_id = ?;
   `;
   const values = [user_id, memo_id];
 
@@ -84,7 +84,7 @@ const modifyMemo = (req, res) => {
   const query = `
       UPDATE memo
       SET contents = ?
-      WHERE user_id = ?, memo_id = ?;
+      WHERE user_id = ? AND memo_id = ?;
   `;
   const values = [contents, user_id, memo_id];
 
@@ -109,7 +109,7 @@ const deleteMemo = (req, res) => {
 
   const query = `
       DELETE FROM memo
-      WHERE user_id = ?, memo_id = ?;
+      WHERE user_id = ? AND memo_id = ?;
   `;
   const values = [user_id, memo_id];
 
