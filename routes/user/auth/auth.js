@@ -131,6 +131,7 @@ const login = async (req, res) => {
 
 router.get('/login', login);
 
+// 자동로그인
 router.get('/autologin', (req, res) => {
     console.log('헤더: ', req.headers);
     const access_token = req.headers.access;
