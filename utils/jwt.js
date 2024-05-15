@@ -39,35 +39,19 @@ module.exports = {
         });
     },
 
-    refreshVerify: async (req, token, user_id) => { // refresh token 검증
+    refreshVerify: (token) => {
+        let decoded = null;
         try {
-            const query = `SELECT refresh FROM token WHERE user_id = ?`;
-
-            return new Promise((resolve, reject) => {
-                req.conn.query(query, user_id, (err, results) => {
-                    if (err) {
-                        console.error(err);
-                        reject(err); // 오류 발생 시 reject 호출
-                    } else {
-                        if(results[0].refresh === token){
-                            // 토큰이 일치할 경우 resolve 호출하여 검증 결과 반환
-                            jwt.verify(token, secret, (err, decoded) => {
-                                if (err) {
-                                    console.error(err);
-                                    reject(err); // 검증 실패 시 reject 호출
-                                } else {
-                                    resolve(decoded); // 검증 성공 시 resolve 호출하여 결과 반환
-                                }
-                            });
-                        } else {
-                            resolve(false); // 토큰이 일치하지 않을 경우 false 반환
-                        }
-                    }
-                });
-            });
+            decoded = jwt.verify(token, refresh_secret);
+            return {
+                ok: true,
+            };
         } catch (err) {
-            console.error(err)
-            return false;
+            return {
+                ok: false,
+                message: err.message,
+            };
         }
+
     },
 };
