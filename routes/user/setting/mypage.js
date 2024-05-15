@@ -4,7 +4,7 @@ const router = express.Router();
 // 마이 페이지 조회
 const viewMyPage = (req, res) => {
     const { user_id } = req.params; // URL 파라미터에서 user_id 추출
-    const user_dday = null;
+    let user_dday = null;
     const query = `
         SELECT *
         FROM user
@@ -58,7 +58,7 @@ const updateMyPage = (req, res) => {
         WHERE user_id = ?;
     `;
 
-    const dday = new Date(d_day[0], d_day[1]-1, d_day[2], 0, 0);
+    const dday = d_day === null ? null : new Date(d_day[0], d_day[1]-1, d_day[2], 0, 0);
     const values = [name, email, dday, user_id];
   
     req.conn.query(query, values, (err, userdata) => {
