@@ -58,7 +58,7 @@ const updateMyPage = (req, res) => {
         WHERE user_id = ?;
     `;
 
-    const dday = d_day === null ? null : new Date(d_day[0], d_day[1]-1, d_day[2], 0, 0);
+    const dday = d_day.year === 0 ? null : new Date(d_day.year, d_day.month-1, d_day.date, 0, 0);
     const values = [name, email, dday, user_id];
   
     req.conn.query(query, values, (err, userdata) => {
