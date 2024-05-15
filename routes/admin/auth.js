@@ -100,7 +100,6 @@ router.get("/login", (req, res, next)=>{
 router.post("/login", (req, res)=>{
     const admin_id = req.body.username;
     const admin_pw = req.body.password;
-    // admin table 따로 만들지 결정 후에 query문 수정
     const query = "SELECT id, pw FROM admin where id = ?";
 
     req.conn.query(query, admin_id, (err, results) => {
@@ -122,6 +121,7 @@ router.post("/login", (req, res)=>{
             });
         } else {
             req.session.user_id = admin_id;
+            req.session.role = 'admin';
             res.redirect('/admin/');
         }
         

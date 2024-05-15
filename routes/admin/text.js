@@ -48,9 +48,9 @@ const { adminRequire } = require('../../utils/middleware');
  *                     description: "오류 메시지"
  */
 router.get("", adminRequire, (req, res)=>{
-    const query = 'SELECT text_id, title FROM text';
-
-    req.conn.query(query, (err, results) => {
+    const query = 'SELECT text_id, title FROM text WHERE user_id = ?';
+    const user_id = req.session.user_id;
+    req.conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -105,9 +105,9 @@ router.get("", adminRequire, (req, res)=>{
  *                       ]
  */
 router.get("/new", adminRequire, (req, res)=>{
-    const query = 'SELECT text_id, title FROM text';
-
-    req.conn.query(query, (err, results) => {
+    const query = 'SELECT text_id, title FROM text WHERE user_id = ?';
+    const user_id = req.session.user_id;
+    req.conn.query(query, user_id, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -246,7 +246,8 @@ router.post("/new", adminRequire, (req, res)=>{
 router.get("/new/:text_id", adminRequire, (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
-    const query2 = 'SELECT text_id, title FROM text';
+    const query2 = 'SELECT text_id, title FROM text WHERE user_id = ?';
+    const user_id = req.session.user_id;
 
     req.conn.query(query, text_id, (err, results) => {
         if (err) {
@@ -259,7 +260,7 @@ router.get("/new/:text_id", adminRequire, (req, res)=>{
 
         if(results.length > 0){
             const text_data = results[0];
-            req.conn.query(query2, (err, results2) => {
+            req.conn.query(query2, user_id, (err, results2) => {
                 if (err) {
                     console.error(err);
                     res.status(500).json({
@@ -341,7 +342,7 @@ router.post("/new/:text_id", adminRequire, (req, res)=>{
     const updatedat = new Date();
     const query = "UPDATE text SET category = ?, title = ?, contents = ?, updatedat = ? WHERE text_id = ?";
     const values = [category, title, contents, updatedat, text_id];
-
+    
     req.conn.query(query, values, (err, results) => {
         if (err) {
             console.error(err);
@@ -416,7 +417,8 @@ router.post("/new/:text_id", adminRequire, (req, res)=>{
 router.get("/:text_id", adminRequire, (req, res)=>{
     const text_id = req.params.text_id;
     const query = 'SELECT * FROM text WHERE text_id = ?';
-    const query2 = 'SELECT text_id, title FROM text';
+    const query2 = 'SELECT text_id, title FROM text WHERE user_id = ?';
+    const user_id = req.session.user_id;
 
     req.conn.query(query, text_id, (err, results1) => {
         if (err) {
@@ -429,7 +431,7 @@ router.get("/:text_id", adminRequire, (req, res)=>{
 
         if(results1.length > 0){
             const text_data = results1[0];
-            req.conn.query(query2, (err, results2) => {
+            req.conn.query(query2, user_id, (err, results2) => {
                 if (err) {
                     console.error(err);
                     res.status(500).json({

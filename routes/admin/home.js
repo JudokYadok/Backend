@@ -41,7 +41,7 @@ const router = express.Router();
  */
 
 router.get("/", (req, res)=>{
-    if(req.session.user_id){
+    if(req.session.role){
         res.status(200).render('main', {    //페이지명 입력
             result_req: "관리자 메인 페이지 조회 성공"
         });
