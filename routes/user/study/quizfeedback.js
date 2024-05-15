@@ -24,6 +24,6 @@ const addQuizFeedback = (req, res) => {
     });
 };
 
-router.post("/:user_id/:quiz_id", addQuizFeedback);
+router.post("/:user_id/:quiz_id/feedback", addQuizFeedback);
 
 module.exports = router;

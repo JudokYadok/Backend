@@ -23,11 +23,13 @@ const userAuthRouter = require('./routes/user/auth/auth');
 const userTextRouter = require('./routes/user/study/usertext');
 const prevTextRouter = require('./routes/user/study/prevtext');
 const prevtextQuizRouter = require('./routes/user/study/prevquiz');
-// const usertextQuizRouter = require('./routes/user/study/userquiz');
+const usertextQuizRouter = require('./routes/user/study/userquiz');
 const myTextRouter = require('./routes/user/library/mytext');
 const memoRouter = require('./routes/user/library/memo');
 const myPageRouter = require('./routes/user/setting/mypage.js');
 const testQuizRouter = require('./routes/user/study/testquiz');
+const quizFeedbackRouter = require('./routes/user/study/quizfeedback');
+const feedbackRouter = require('./routes/user/setting/feedback');
 
 // 세션 사용 설정
 app.use(session({
@@ -80,7 +82,9 @@ app.use('/user/library/memo', memoRouter);
 app.use('/user/setting/mypage', myPageRouter);
 app.use('/user/study/prevtext/test', testQuizRouter);
 app.use('/user/study/prevtext', prevtextQuizRouter);
-// app.use('/user/study/mytext/:category/:text_id/quiz', usertextQuizRouter);
+app.use('/user/study/mytext', usertextQuizRouter);
+app.use('/user/study/prevtext', quizFeedbackRouter);
+app.use('/user/setting/feedback', feedbackRouter);
 
 const swaggerOptions = {
     swaggerDefinition: {
