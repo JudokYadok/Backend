@@ -3,12 +3,15 @@ const router = express.Router();
 
 // 메모 목록 조회
 const viewMemoList = (req, res) => {
-  const query = `
-      SELECT memo.memo_id, memo.updatedAt, memo.title
-      FROM memo
-  `;
+    const { user_id } = req.params;
+    const query = `
+        SELECT memo.memo_id, memo.updatedAt, memo.title
+        FROM memo
+        WHERE user_id = ?;
+    `;
+    const values = [user_id];
 
-  req.conn.query(query, (err, memos) => {
+  req.conn.query(query, values, (err, memos) => {
       if (err) {
           console.error(err);
           res.status(500).json({ error: 'Failed to fetch memo list' });
@@ -26,14 +29,14 @@ const viewMemoList = (req, res) => {
 
 // 메모 조회
 const viewMemo = (req, res) => {
-  const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
+  const { user_id, memo_id } = req.params; // URL 파라미터에서 memo_id 추출
 
   const query = `
       SELECT memo_id, title, contents
       FROM memo
-      WHERE memo_id = ?;
+      WHERE user_id = ?, memo_id = ?;
   `;
-  const values = [memo_id];
+  const values = [user_id, memo_id];
 
   req.conn.query(query, values, (err, memo) => {
       if (err) {
@@ -52,38 +55,38 @@ const viewMemo = (req, res) => {
 
 // 메모 추가
 const addMemo = (req, res) => {
-  const { title, contents } = req.body; // 요청에서 JSON 데이터 추출
+    const { user_id } = req.params;
+    const { title, contents } = req.body; // 요청에서 JSON 데이터 추출
 
-  const query = `
-      INSERT INTO memo (user_id, title, contents)
-      VALUES (?, ?, ?);
-  `;
-  const user_id = 0;
-  const values = [user_id, title, contents];
+    const query = `
+        INSERT INTO memo (user_id, title, contents)
+        VALUES (?, ?, ?);
+    `;
+    const values = [user_id, title, contents];
 
-  req.conn.query(query, values, (err, result) => {
-    if (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to add memo to the library' });
-        return;
-    }
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to add memo to the library' });
+            return;
+        }
 
-    // 새로 추가된 텍스트의 ID를 포함하여 응답
-    res.status(200).json({ memo_id: result.insertId, title, contents });
-});
+        // 새로 추가된 텍스트의 ID를 포함하여 응답
+        res.status(200).json({ memo_id: result.insertId, title, contents });
+    });
 };
 
 // 메모 수정
 const modifyMemo = (req, res) => {
-  const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
+  const { user_id, memo_id } = req.params; // URL 파라미터에서 memo_id 추출
   const { contents } = req.body; // 요청에서 JSON 데이터 추출
 
   const query = `
       UPDATE memo
       SET contents = ?
-      WHERE memo_id = ?;
+      WHERE user_id = ?, memo_id = ?;
   `;
-  const values = [contents, memo_id];
+  const values = [contents, user_id, memo_id];
 
   req.conn.query(query, values, (err, result) => {
       if (err) {
@@ -102,13 +105,13 @@ const modifyMemo = (req, res) => {
 
 // 메모 삭제
 const deleteMemo = (req, res) => {
-  const { memo_id } = req.params; // URL 파라미터에서 memo_id 추출
+  const { user_id, memo_id } = req.params; // URL 파라미터에서 memo_id 추출
 
   const query = `
       DELETE FROM memo
-      WHERE memo_id = ?;
+      WHERE user_id = ?, memo_id = ?;
   `;
-  const values = [memo_id];
+  const values = [user_id, memo_id];
 
   req.conn.query(query, values, (err, result) => {
       if (err) {
@@ -126,10 +129,10 @@ const deleteMemo = (req, res) => {
 };
 
 
-router.get("/", viewMemoList);
-router.get("/:memo_id", viewMemo);
-router.post("/", addMemo);
-router.put("/:memo_id", modifyMemo);
-router.delete("/:memo_id", deleteMemo);
+router.get("/:user_id", viewMemoList);
+router.get("/:user_id/:memo_id", viewMemo);
+router.post("/:user_id", addMemo);
+router.put("/:user_id/:memo_id", modifyMemo);
+router.delete("/:user_id/:memo_id", deleteMemo);
 
 module.exports = router;

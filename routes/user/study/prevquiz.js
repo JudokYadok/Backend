@@ -99,7 +99,26 @@ const createPrevtextQuiz = (req, res) => {
 
 // 기출 지문 퀴즈 저장
 const savePrevtextQuiz = (req, res) => {
-    // 
+    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
+    const user_id = req.session.user_id; // 사용자 ID
+
+    const query = `
+        INSERT INTO text (user_id, category, title, contents) 
+        VALUES (?, ?, ?, ?);
+    `;
+    const values = [user_id, category, title, contents];
+
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to add text to the library' });
+            return;
+        }
+
+        // 새로 추가된 텍스트의 ID를 포함하여 응답
+        res.json({ text_id: result.insertId, category, title, contents });
+        console.log(res);
+  });
 };
 
 // 채점 시 요약 제공

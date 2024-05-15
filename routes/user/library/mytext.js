@@ -3,7 +3,7 @@ const router = express.Router();
 
 // 추가한 사용자 지문 목록 조회
 const viewMytextList = (req, res) => {
-  const user_id = req.session.user_id; // 사용자 ID
+  const user_id = req.params; // 사용자 ID
 
   const query = `
       SELECT category, title, year
@@ -25,14 +25,14 @@ const viewMytextList = (req, res) => {
 
 // 추가한 사용자 지문 조회
 const viewMytext = (req, res) => {
-  const { text_id } = req.params; // URL 파라미터에서 text_id 추출
+  const { user_id, text_id } = req.params; // URL 파라미터에서 text_id 추출
 
   const query = `
       SELECT title, year, contents
       FROM text
-      WHERE text_id = ?;
+      WHERE user_id = ?, text_id = ?;
   `;
-  const values = [text_id];
+  const values = [user_id, text_id];
 
   req.conn.query(query, values, (err, MyText) => {
       if (err) {
@@ -51,38 +51,38 @@ const viewMytext = (req, res) => {
 
 // 사용자 지문 추가
 const addMytext = (req, res) => {
-  const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
-  const user_id = req.session.user_id; // 사용자 ID
+    const { user_id } = req.params;
+    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
 
-  const query = `
-      INSERT INTO text (user_id, category, title, contents) 
-      VALUES (?, ?, ?, ?);
-  `;
-  const values = [user_id, category, title, contents];
+     const query = `
+        INSERT INTO text (user_id, category, title, contents) 
+        VALUES (?, ?, ?, ?);
+    `;
+     const values = [user_id, category, title, contents];
 
-  req.conn.query(query, values, (err, result) => {
-      if (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Failed to add text to the library' });
-          return;
-      }
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to add text to the library' });
+            return;
+        }
 
-      // 새로 추가된 텍스트의 ID를 포함하여 응답
-      res.json({ text_id: result.insertId, category, title, contents });
-  });
+        // 새로 추가된 텍스트의 ID를 포함하여 응답
+        res.json({ text_id: result.insertId, category, title, contents });
+    });
 };
 
 // 사용자 지문 수정
 const modifyMytext = (req, res) => {
-  const { text_id } = req.params; // URL 파라미터에서 text_id 추출
+  const { user_id, text_id } = req.params; // URL 파라미터에서 text_id 추출
   const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
 
   const query = `
       UPDATE text 
       SET category = ?, title = ?, contents = ? 
-      WHERE text_id = ?;
+      WHERE user_id = ?, text_id = ?;
   `;
-  const values = [category, title, contents, text_id];
+  const values = [category, title, contents, user_id, text_id];
 
   req.conn.query(query, values, (err, result) => {
       if (err) {
@@ -99,9 +99,9 @@ const modifyMytext = (req, res) => {
   });
 };
 
-router.get("/", viewMytextList);
-router.get("/:text_id", viewMytext);
-router.post("/", addMytext);
-router.put("/", modifyMytext);
+router.get("/:user_id", viewMytextList);
+router.get("/:user_id/:text_id", viewMytext);
+router.post("/:user_id", addMytext);
+router.put("/:user_id", modifyMytext);
 
 module.exports = router;
