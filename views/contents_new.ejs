@@ -144,7 +144,7 @@
     </div>
 
     <div id="nav">
-        <ul style="padding: 0;">
+        <ul style="padding: 0; height: 90vh; overflow-y: auto;">
             <% for (var i=0; i < text_list.length; i++) { %>
                 <li style="list-style-type: none; margin: 10px; padding: 30px; background-color: white; border-radius: 30px; border-color: #FDBBBB; border-width: 3px; border-style: solid;"
                     onmouseover="this.style.backgroundColor='rgba(253, 187, 187, 0.4)';"
@@ -172,10 +172,12 @@
         style="width: 300px; height: 30px; font-size: 20px; border-radius: 10px;" value="" required>
 
     <select name="text_category" id="type" required>
-        <option value="경제">경제</option>
         <option value="예술">예술</option>
         <option value="과학">과학</option>
         <option value="기술">기술</option>
+        <option value="사회">사회</option>
+        <option value="인문">인문</option>
+        <option value="독서 이론">독서 이론</option>
     </select>
 
 
