@@ -100,7 +100,7 @@ router.get("/login", (req, res, next)=>{
 router.post("/login", (req, res)=>{
     const admin_id = req.body.username;
     const admin_pw = req.body.password;
-    const query = "SELECT id, pw FROM admin where id = ?";
+    const query = "SELECT * FROM admin where name = ?";
 
     req.conn.query(query, admin_id, (err, results) => {
         if (err) {
@@ -120,7 +120,7 @@ router.post("/login", (req, res)=>{
                 result_req: '비밀번호가 일치하지 않습니다.'
             });
         } else {
-            req.session.user_id = admin_id;
+            req.session.user_id = results[0].id;
             req.session.role = 'admin';
             res.redirect('/admin/');
         }
