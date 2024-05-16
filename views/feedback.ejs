@@ -106,18 +106,43 @@
                 <% } %>
         </ul>
     </div>
-
-    <div id="section">
+    <% if(feedback_list) { %>
+        <div id="section">
+            <p style="font-size: 40px; font-weight: bold;"> 앱 피드백 </p>
+        </div>    <div id="section">
         <% for (var i=0; i < feedback_list.length; i++) { %>
             <div style="margin-bottom: 20px; padding: 10px; width: 1000px; height: fit-content; border-radius: 20px; background-color: rgba(250, 240, 240, 1); border: none;">
                 <div style="margin-bottom: 10px; align-items: center; display: flex; justify-content: center; padding: 10px; width: 20%; height: 30%; border-radius: 20px; background-color: rgba(245, 245, 245, 1); border: none;">
-                    <span style="font-size: 20px; font-weight: bold; text-align: center;"><%= feedback_list[i].feedback_title %></span>
+                    <span style="font-size: 20px; font-weight: bold; text-align: center;">작성일: <%= feedback_list[i].createdAt %></span>
                 </div>
 
                 <span style="font-size: 18px; font-weight: normal; text-align: start;"><%= feedback_list[i].contents %></span>
             </div>
             <% } %>
     </div>
+    <% } %>
+
+    <br><br>
+    <% if(quizfeedback_list) { %>
+        <div id="section">
+            <p style="font-size: 40px; font-weight: bold;"> 퀴즈 피드백 </p>
+        </div>    <div id="section">
+        <% for (var i=0; i < quizfeedback_list.length; i++) { %>
+            <div style="margin-bottom: 20px; padding: 10px; width: 1000px; height: fit-content; border-radius: 20px; background-color: rgba(250, 240, 240, 1); border: none;">
+                <div style="margin-bottom: 10px; align-items: center; display: flex; justify-content: center; padding: 10px; width: 20%; height: 30%; border-radius: 20px; background-color: rgba(245, 245, 245, 1); border: none;">
+                    <span style="font-size: 20px; font-weight: bold; text-align: center;">작성일: <%= quizfeedback_list[i].createdAt %></span>
+                </div>
+                <details>
+                    <summary style="font-size: 18px; font-weight: normal;">퀴즈 <%= quizfeedback_list[i].quiz_id %> 내용 확인</summary>
+                    <div style="font-size: 18px; font-weight: normal; text-align: start;">
+                        문제: 
+                    </div>
+                </details>
+                <span style="font-size: 18px; font-weight: normal; text-align: start;"><%= quizfeedback_list[i].contents %></span>
+            </div>
+            <% } %>
+    </div>
+    <% } %>
 
     </span>
 </body>
