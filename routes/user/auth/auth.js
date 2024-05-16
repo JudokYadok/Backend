@@ -129,6 +129,7 @@ const login = async (req, res) => {
     }
 };
 
+// 로그인
 router.get('/login', login);
 
 // 자동로그인
@@ -144,14 +145,41 @@ router.get('/autologin', (req, res) => {
         return;
     }
 
-    const query = `SELECT user.createdAt AS createdAt, token.refresh AS refresh
+    const query = `SELECT user.user_id AS user_id, user.createdAt AS createdAt
+                   FROM user
+                   INNER JOIN token ON user.user_id = token.user_id
+                   WHERE token.refresh = ?`;
+    const query2 = `SELECT createdAt
                     FROM user
-                    INNER JOIN token ON user.user_id = token.user_id
-                    WHERE user.user_id = ?`;
+                    WHERE user_id = ?`;
     
     const access_decoded = jwt.verify(access_token);
-    const user_id = access_decoded.id;
-    console.log("user id: ", access_decoded.id);
+    if(access_decoded.ok){
+        req.conn.query(query2, [access_decoded.id], (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({
+                    result_req: err.message,
+                });
+                return;
+            }
+    
+            if(results.length > 0){
+                res.status(200).send({
+                    user_id: access_decoded.id,
+                    createdAt: results[0].createdAt,
+                    access_token: access_token,
+                    refresh_token: refresh_token,
+                });
+                return;
+            } else {
+                res.status(401).json({
+                    result_req: "회원 정보가 존재하지 않음, 회원가입 필요",
+                });
+                return;
+            }
+        });
+    }
 
     const refresh_decoded = jwt.refreshVerify(refresh_token);
     if(!refresh_decoded.ok){
@@ -161,7 +189,7 @@ router.get('/autologin', (req, res) => {
         return;
     }
 
-    req.conn.query(query, [user_id], (err, results) => {
+    req.conn.query(query, [refresh_token], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({
@@ -172,11 +200,12 @@ router.get('/autologin', (req, res) => {
 
         if(results.length > 0){
             res.status(200).send({
-                user_id: user_id,
+                user_id: results[0].user_id,
                 createdAt: results[0].createdAt,
-                access_token: jwt.sign(user_id),
+                access_token: jwt.sign(results[0].user_id),
                 refresh_token: refresh_token,
             });
+            return;
         } else {
             res.status(401).json({
                 result_req: "refresh token이 DB에 존재하지 않음, 재로그인 필요",
