@@ -3,10 +3,10 @@ const router = express.Router();
 
 // 추가한 사용자 지문 목록 조회
 const viewMytextList = (req, res) => {
-  const user_id = req.params; // 사용자 ID
+  const { user_id } = req.params; // 사용자 ID
 
   const query = `
-      SELECT category, title, year
+      SELECT category, title, text_id
       FROM text
       WHERE user_id = ?;
   `;
@@ -19,6 +19,7 @@ const viewMytextList = (req, res) => {
           return;
       }
 
+      console.log(query);
       res.json(MyTexts); // 조회된 지문 리스트를 JSON 형태로 응답
   });
 };
@@ -28,7 +29,7 @@ const viewMytext = (req, res) => {
   const { user_id, text_id } = req.params; // URL 파라미터에서 text_id 추출
 
   const query = `
-      SELECT title, year, contents
+      SELECT title, contents
       FROM text
       WHERE user_id = ? AND text_id = ?;
   `;

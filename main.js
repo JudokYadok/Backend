@@ -83,7 +83,7 @@ app.use('/user/setting/mypage', myPageRouter);
 app.use('/user/study/prevtext/test', testQuizRouter);
 app.use('/user/study/prevtext', prevtextQuizRouter);
 app.use('/user/study/mytext', usertextQuizRouter);
-app.use('/user/study/prevtext', quizFeedbackRouter);
+app.use('/user/study/feedback', quizFeedbackRouter);
 app.use('/user/setting/feedback', feedbackRouter);
 
 const swaggerOptions = {

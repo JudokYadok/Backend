@@ -10,7 +10,7 @@ const createPrevtextQuiz = (req, res) => {
     const query = `
       SELECT contents
       FROM text
-      WHERE category = ?
+      WHERE user_id = 0 AND category = ?
       AND text_id = ?;
   `;
     const values = [category, text_id];
@@ -99,8 +99,14 @@ const createPrevtextQuiz = (req, res) => {
 
 // 기출 지문 퀴즈 저장
 const savePrevtextQuiz = (req, res) => {
-    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
-    const user_id = req.session.user_id; // 사용자 ID
+    const { category, text_id, user_id } = req.params;
+    const jsonData = req.body;
+
+    // body로 받은 json에서 데이터 추출
+    const userAnswerList = jsonData.user_answer_list;
+    const correctAnswerList = jsonData.ai_answer_list;
+    const questionLIst = jsonData.quiz_list.question_list;
+    const answerList = jsonData.quiz_list.answer_list;
 
     const query = `
         INSERT INTO text (user_id, category, title, contents) 
@@ -194,7 +200,7 @@ const summerizePrevtext = (req, res) => {
 }
 
 router.post("/:category/:text_id/quiz", createPrevtextQuiz);
-router.post("/save", savePrevtextQuiz);
+router.post("/:category/:text_id/quiz/save/:user_id", savePrevtextQuiz);
 router.post("/:category/:text_id/quiz/mark", summerizePrevtext);
 
 module.exports = router;

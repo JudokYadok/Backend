@@ -8,7 +8,7 @@ const addFeedback = (req, res) => {
 
      const query = `
         INSERT INTO feedback (user_id, contents) 
-        VALUES (?, ?, ?);
+        VALUES (?, ?);
     `;
      const values = [user_id, contents];
 
