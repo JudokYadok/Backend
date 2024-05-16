@@ -133,12 +133,13 @@ const login = async (req, res) => {
 router.get('/login', login);
 
 // 자동로그인
-router.get('/autologin', (req, res) => {
+router.get('/autologin', async (req, res) => {
     console.log('헤더: ', req.headers);
+        
     const access_token = req.headers.access;
     const refresh_token = req.headers.refresh;
 
-    if(access_token === null || refresh_token === null){
+    if(access_token === undefined || refresh_token === undefined){
         res.status(401).json({
             result_req: "토큰이 존재하지 않음, 로그인 필요",
         });
@@ -149,38 +150,7 @@ router.get('/autologin', (req, res) => {
                    FROM user
                    INNER JOIN token ON user.user_id = token.user_id
                    WHERE token.refresh = ?`;
-    const query2 = `SELECT createdAt
-                    FROM user
-                    WHERE user_id = ?`;
     
-    const access_decoded = jwt.verify(access_token);
-    if(access_decoded.ok){
-        req.conn.query(query2, [access_decoded.id], (err, results) => {
-            if (err) {
-                console.error(err);
-                res.status(500).json({
-                    result_req: err.message,
-                });
-                return;
-            }
-    
-            if(results.length > 0){
-                res.status(200).send({
-                    user_id: access_decoded.id,
-                    createdAt: results[0].createdAt,
-                    access_token: access_token,
-                    refresh_token: refresh_token,
-                });
-                return;
-            } else {
-                res.status(401).json({
-                    result_req: "회원 정보가 존재하지 않음, 회원가입 필요",
-                });
-                return;
-            }
-        });
-    }
-
     const refresh_decoded = jwt.refreshVerify(refresh_token);
     if(!refresh_decoded.ok){
         res.status(401).json({
@@ -210,6 +180,7 @@ router.get('/autologin', (req, res) => {
             res.status(401).json({
                 result_req: "refresh token이 DB에 존재하지 않음, 재로그인 필요",
             });
+            return;
         }
     });
 });
