@@ -119,9 +119,9 @@ router.get("", adminRequire, (req, res)=>{
  */
 router.get("/:user_id", adminRequire, (req, res)=>{
     const user_id = req.params.user_id;
-    const query = 'SELECT feedback_id, contents FROM feedback WHERE user_id = ?';
+    const query = 'SELECT feedback_id, contents, createdAt FROM feedback WHERE user_id = ?';
     const query2 = 'SELECT user_id, name FROM user';
-    const query3 = `SELECT quizfeedback.feedback_id, quizfeedback.contents
+    const query3 = `SELECT quizfeedback.feedback_id, quizfeedback.contents, quizfeedback.createdAt
                     FROM quizfeedback
                     INNER JOIN quiz ON quizfeedback.quiz_id = quiz.quiz_id
                     WHERE user_id = ?`
