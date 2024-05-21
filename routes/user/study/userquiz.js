@@ -104,7 +104,49 @@ const createUsertextQuiz = (req, res) => {
 
 // 사용자 지문 퀴즈 저장
 const saveUsertextQuiz = (req, res) => {
-    // 
+    const { text_id, user_id } = req.params;
+    const { quiz_list, user_answer_list, ai_answer_list } = req.body;
+
+    const connection = req.conn;
+
+    connection.beginTransaction((err) => {
+        if (err) {
+            console.error('Error starting transaction:', err);
+            return res.status(500).json({ message: 'Failed to start transaction' });
+        }
+
+        // quiz_list 데이터를 직렬화
+        const questions = JSON.stringify(quiz_list.question_list);
+        const answers = JSON.stringify(quiz_list.answer_list);
+        const user_answers = JSON.stringify(user_answer_list);
+        const correct_answers = JSON.stringify(ai_answer_list);
+
+        // 쿼리 실행
+        const query = `
+            INSERT INTO quiz (user_id, text_id, questions, answers, user_answers, correct_answers)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        const values = [user_id, text_id, questions, answers, user_answers, correct_answers];
+
+        connection.query(query, values, (err, result) => {
+            if (err) {
+                console.error('Error executing query:', err);
+                connection.rollback(() => {});
+                return res.status(500).json({ message: 'Failed to save quiz' });
+            }
+
+            connection.commit((err) => {
+                if (err) {
+                    console.error('Error committing transaction:', err);
+                    connection.rollback(() => {});
+                    return res.status(500).json({ message: 'Failed to commit transaction' });
+                }
+
+                console.log(values, result);
+                res.status(201).json({ message: 'Quiz saved successfully', quiz_id: result.insertId });
+            });
+        });
+    });
 };
 
 // 채점 시 요약 제공

@@ -2,6 +2,7 @@ const { spawn } = require("child_process");
 const express = require('express');
 const router = express.Router();
 
+// 퀴즈 생성 (테스트)
 const createTestQuiz = (req, res) => {
     // content_match.py 실행
     const query = `
@@ -60,6 +61,90 @@ const createTestQuiz = (req, res) => {
     });
 };
 
+// 퀴즈 저장 (테스트)
+const saveTestQuiz = (req, res) => {
+    const { user_id, text_id } = req.params;
+    const { quiz_list, user_answer_list, correct_answer_list } = req.body;
+
+    const connection = req.conn;
+
+    connection.beginTransaction((err) => {
+        if (err) {
+            console.error('Error starting transaction:', err);
+            return res.status(500).json({ message: 'Failed to start transaction' });
+        }
+
+        // quiz_list 데이터를 직렬화
+        const questions = JSON.stringify(quiz_list.question_list);
+        const answers = JSON.stringify(quiz_list.answer_list);
+        const user_answers = JSON.stringify(user_answer_list);
+        const correct_answers = JSON.stringify(correct_answer_list);
+
+        // 쿼리 실행
+        const query = `
+            INSERT INTO quiz (user_id, text_id, questions, answers, user_answers, correct_answers)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        const values = [user_id, text_id, questions, answers, user_answers, correct_answers];
+
+        connection.query(query, values, (err, result) => {
+            if (err) {
+                console.error('Error executing query:', err);
+                connection.rollback(() => {});
+                return res.status(500).json({ message: 'Failed to save quiz' });
+            }
+
+            connection.commit((err) => {
+                if (err) {
+                    console.error('Error committing transaction:', err);
+                    connection.rollback(() => {});
+                    return res.status(500).json({ message: 'Failed to commit transaction' });
+                }
+
+                console.log(values, result);
+                res.status(201).json({ message: 'Quiz saved successfully', quiz_id: result.insertId });
+            });
+        });
+    });
+};
+
+// 퀴즈 조회 (테스트)
+const viewSavedQuiz = (req, res) => {
+    const { user_id, quiz_id } = req.params;
+
+    const query = `
+        SELECT user_id, text_id, questions, answers, user_answers, correct_answers, createdAt
+        FROM quiz
+        WHERE user_id = ? AND quiz_id = ?
+    `;
+    const values = [user_id, quiz_id];
+
+    req.conn.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).json({ message: 'Failed to retrieve quiz' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Quiz not found' });
+        }
+
+        const quiz = results[0];
+        console.log(quiz);
+        res.status(200).json({
+            user_id: quiz.user_id,
+            text_id: quiz.text_id,
+            questions: JSON.parse(quiz.questions),
+            answers: JSON.parse(quiz.answers),
+            user_answers: JSON.parse(quiz.user_answers),
+            correct_answers: JSON.parse(quiz.correct_answers),
+            createdAt: quiz.createdAt
+        });
+    });
+};
+
 router.post("/", createTestQuiz);
+router.post("/:user_id/:text_id/save", saveTestQuiz);
+router.get("/:user_id/:quiz_id", viewSavedQuiz);
 
 module.exports = router;
