@@ -121,10 +121,11 @@ router.get("/:user_id", adminRequire, (req, res)=>{
     const user_id = req.params.user_id;
     const query = 'SELECT feedback_id, contents, createdAt FROM feedback WHERE user_id = ?';
     const query2 = 'SELECT user_id, name FROM user';
-    const query3 = `SELECT quizfeedback.feedback_id, quizfeedback.contents, quizfeedback.createdAt
+    const query3 = `SELECT quizfeedback.feedback_id, quizfeedback.contents, quizfeedback.createdAt,
+                    quiz.quiz_id, quiz.questions, quiz.answers
                     FROM quizfeedback
                     INNER JOIN quiz ON quizfeedback.quiz_id = quiz.quiz_id
-                    WHERE user_id = ?`
+                    WHERE quizfeedback.user_id = ?`
 
     req.conn.query(query, user_id, (err, feedback_list) => {
         if (err) {
@@ -142,8 +143,7 @@ router.get("/:user_id", adminRequire, (req, res)=>{
                 });
                 return;
             }
-            /*
-            req.conn.query(query3, (err, quizfeedback_list) => {
+            req.conn.query(query3, user_id, (err, quizfeedback_list) => {
                 if (err) {
                     console.error(err);
                     res.status(500).json({
@@ -155,16 +155,9 @@ router.get("/:user_id", adminRequire, (req, res)=>{
                     result_req: "피드백 목록 조회 성공",
                     user_list: user_list,
                     feedback_list: feedback_list,
-                    quizfeedback_list: quizfeedback_list
+                    quizfeedback_list: quizfeedback_list,
                 });
             })
-            */
-            res.status(200).render('feedback', {
-                result_req: "피드백 목록 조회 성공",
-                user_list: user_list,
-                feedback_list: feedback_list,
-                quizfeedback_list: null,    //
-            });
         });
     });
 });
