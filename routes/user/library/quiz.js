@@ -72,7 +72,33 @@ const viewSavedQuiz = (req, res) => {
     });
 };
 
+// 퀴즈 삭제
+const deleteSavedQuiz = (req, res) => {
+    const { user_id, quiz_id } = req.params;
+
+    const query = `
+        DELETE FROM quiz
+        WHERE user_id = ? AND quiz_id = ?;
+    `;
+    const values = [user_id, quiz_id];
+
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to delete quiz' });
+            return;
+        }
+
+        if (result.affectedRows !== 0) {
+            res.status(200).json({ message: 'Quiz deleted successfully' }); 
+        } else {
+            res.status(404).json({ error: 'Quiz not found' }); 
+        }
+    });
+}
+
 router.get("/:user_id", selectSavedQuiz);
 router.get("/:user_id/:quiz_id", viewSavedQuiz);
+router.delete("/:user_id/:quiz_id", deleteSavedQuiz);
 
 module.exports = router;

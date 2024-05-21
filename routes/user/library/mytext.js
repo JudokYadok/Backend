@@ -75,36 +75,60 @@ const addMytext = (req, res) => {
 
 // 사용자 지문 수정
 const modifyMytext = (req, res) => {
-  const { user_id, text_id } = req.params; // URL 파라미터에서 text_id 추출
-  const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
+    const { user_id, text_id } = req.params; // URL 파라미터에서 text_id 추출
+    const { category, title, contents } = req.body; // 요청에서 JSON 데이터 추출
 
-  const query = `
-      UPDATE text 
-      SET category = ?, title = ?, contents = ? 
-      WHERE user_id = ? AND text_id = ?;
-  `;
-  const values = [category, title, contents, user_id, text_id];
+    const query = `
+        UPDATE text 
+        SET category = ?, title = ?, contents = ? 
+        WHERE user_id = ? AND text_id = ?;
+    `;
+    const values = [category, title, contents, user_id, text_id];
 
-  req.conn.query(query, values, (err, result) => {
-      if (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Failed to modify text' });
-          return;
-      }
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to modify text' });
+            return;
+        }
 
-      if (result.affectedRows === 0) {
-          res.status(404).json({ error: 'Text not found' });
-      } else {
-          res.json({ message: 'Text modified successfully' });
-      }
-  });
+        if (result.affectedRows === 0) {
+            res.status(404).json({ error: 'Text not found' });
+        } else {
+            res.json({ message: 'Text modified successfully' });
+        }
+    });
 };
 
-// 사용자 지문 삭제 
+// 사용자 지문 삭제
+const deleteMyText = (req, res) => {
+    const { user_id, quiz_id } = req.params;
+
+    const query = `
+        DELETE FROM quiz
+        WHERE user_id = ? AND quiz_id = ?;
+    `;
+    const values = [user_id, quiz_id];
+
+    req.conn.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to delete quiz' });
+            return;
+        }
+
+        if (result.affectedRows !== 0) {
+            res.status(200).json({ message: 'Quiz deleted successfully' }); 
+        } else {
+            res.status(404).json({ error: 'Quiz not found' }); 
+        }
+    });
+}
 
 router.get("/:user_id", viewMytextList);
 router.get("/:user_id/:text_id", viewMytext);
 router.post("/:user_id", addMytext);
-router.put("/:user_id", modifyMytext);
+router.put("/:user_id/:text_id", modifyMytext);
+router.delete("/:user_id/:text_id", deleteMyText);
 
 module.exports = router;
