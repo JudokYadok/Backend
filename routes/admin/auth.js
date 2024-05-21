@@ -96,7 +96,6 @@ router.get("/login", (req, res, next)=>{
  *                     type: string
  *                     description: "오류 메시지"
  */
-// 암호화 추가 필요
 router.post("/login", (req, res)=>{
     const admin_id = req.body.username;
     const admin_pw = req.body.password;
