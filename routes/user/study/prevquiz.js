@@ -100,7 +100,7 @@ const createPrevtextQuiz = (req, res) => {
 // 기출 지문 퀴즈 저장
 const savePrevtextQuiz = (req, res) => {
     const { text_id, user_id } = req.params;
-    const { quiz_list, user_answer_list, ai_answer_list } = req.body;
+    const { quiz_list, user_answer_list, correct_answer_list } = req.body;
 
     const connection = req.conn;
 
@@ -114,7 +114,7 @@ const savePrevtextQuiz = (req, res) => {
         const questions = JSON.stringify(quiz_list.question_list);
         const answers = JSON.stringify(quiz_list.answer_list);
         const user_answers = JSON.stringify(user_answer_list);
-        const correct_answers = JSON.stringify(ai_answer_list);
+        const correct_answers = JSON.stringify(correct_answer_list);
 
         // 쿼리 실행
         const query = `

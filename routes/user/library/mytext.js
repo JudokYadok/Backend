@@ -100,6 +100,8 @@ const modifyMytext = (req, res) => {
   });
 };
 
+// 사용자 지문 삭제 
+
 router.get("/:user_id", viewMytextList);
 router.get("/:user_id/:text_id", viewMytext);
 router.post("/:user_id", addMytext);
