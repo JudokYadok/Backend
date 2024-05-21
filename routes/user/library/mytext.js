@@ -102,25 +102,25 @@ const modifyMytext = (req, res) => {
 
 // 사용자 지문 삭제
 const deleteMyText = (req, res) => {
-    const { user_id, quiz_id } = req.params;
+    const { user_id, text_id } = req.params;
 
     const query = `
-        DELETE FROM quiz
-        WHERE user_id = ? AND quiz_id = ?;
+        DELETE FROM text
+        WHERE user_id = ? AND text_id = ?;
     `;
-    const values = [user_id, quiz_id];
+    const values = [user_id, text_id];
 
     req.conn.query(query, values, (err, result) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: 'Failed to delete quiz' });
+            res.status(500).json({ error: 'Failed to delete text' });
             return;
         }
 
         if (result.affectedRows !== 0) {
-            res.status(200).json({ message: 'Quiz deleted successfully' }); 
+            res.status(200).json({ message: 'Text deleted successfully' }); 
         } else {
-            res.status(404).json({ error: 'Quiz not found' }); 
+            res.status(404).json({ error: 'Text not found' }); 
         }
     });
 }
