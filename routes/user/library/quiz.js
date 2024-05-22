@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const express = require('express');
 const router = express.Router();
 
@@ -42,9 +43,25 @@ const viewSavedQuiz = (req, res) => {
     const { user_id, quiz_id } = req.params;
 
     const query = `
-        SELECT user_id, text_id, questions, answers, user_answers, correct_answers, createdAt
-        FROM quiz
-        WHERE user_id = ? AND quiz_id = ?
+        SELECT 
+            quiz.quiz_id,
+            quiz.user_id,
+            quiz.text_id,
+            quiz.questions,
+            quiz.answers,
+            quiz.user_answers,
+            quiz.correct_answers,
+            quiz.createdAt,
+            text.title,
+            text.contents
+        FROM 
+            quiz
+        INNER JOIN 
+            text 
+        ON 
+            quiz.text_id = text.text_id
+        WHERE 
+            quiz.quiz_id = ?
     `;
     const values = [user_id, quiz_id];
 
@@ -67,7 +84,9 @@ const viewSavedQuiz = (req, res) => {
             answers: JSON.parse(quiz.answers),
             user_answers: JSON.parse(quiz.user_answers),
             correct_answers: JSON.parse(quiz.correct_answers),
-            createdAt: quiz.createdAt
+            createdAt: quiz.createdAt,
+            text_title: quiz.title,
+            text_contents: quiz.contents
         });
     });
 };
