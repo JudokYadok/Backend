@@ -21,6 +21,7 @@ const addQuizFeedback = (req, res) => {
 
         // 새로 추가된 피드백의 ID를 포함하여 응답
         res.json({ feedback_id: result.insertId, quiz_id });
+        console.log()
     });
 };
 

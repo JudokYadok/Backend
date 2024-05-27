@@ -61,9 +61,10 @@ const viewSavedQuiz = (req, res) => {
         ON 
             quiz.text_id = text.text_id
         WHERE 
-            quiz.quiz_id = ?
+            quiz.user_id = ? AND quiz.quiz_id = ?
     `;
     const values = [user_id, quiz_id];
+    console.log(values);
 
     req.conn.query(query, values, (err, results) => {
         if (err) {
@@ -76,7 +77,7 @@ const viewSavedQuiz = (req, res) => {
         }
 
         const quiz = results[0];
-        console.log(quiz);
+        console.log(results);
         res.status(200).json({
             user_id: quiz.user_id,
             text_id: quiz.text_id,
