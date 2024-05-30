@@ -2,6 +2,7 @@ dbconfig.js
 .env
 node_modules
 envenv.js
+jwtconfig.js
 config.json
 result7.json
 result8.json
