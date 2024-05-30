@@ -5,7 +5,7 @@ const session = require('express-session');
 const ejs = require('ejs');
 const mysql = require('mysql');
 const child_process = require('child_process');
-const dbConfig = require('./dbconfig');
+const dbConfig = require('./config/dbconfig.js');
 const path = require('path');
 
 const app = express();
